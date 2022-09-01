@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+body {
+    background: linear-gradient(45deg, #120716, #09111a);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    color: white;
+    overflow-x: hidden;
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header {
+    height: max-content;
+    border: 0.1rem solid transparent;
+    border-bottom: 0.15rem solid #ffffff9a ;
+    border-top: 0.15rem solid #ffffff9a ;
+    background: linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: 150px 150px;
+    background-position-x: calc(var(--x, center) * -1);
+    background-position-y: calc(var(--x, center) * -1);
+    background-color: rgba(0, 0, 0, 0.425);
+    transition: transform 250ms linear;
+    font-size: 27px;
+    font-family: 'Amatic SC', cursive;
+    margin: 1rem;
+}
+
+.header>h1{
+    margin-bottom: 0;
+}
+
+.header h2{
+    margin-top: 0;
+}
+
+.header:hover {
+    transform: perspective(1000px) rotateX(var(--rotateX)) rotateY(var(--rotateY)) scale3d(1.025, 1.025, 1.025);
+}
+
+.rainbow_gradient {
+    background-image: linear-gradient(90deg, rgba(255, 0, 0, 0.85), rgba(238, 255, 0, 0.85), rgba(0, 255, 30, 0.85), rgba(0, 255, 251, 0.85), rgba(21, 0, 255, 0.85));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.sections {
+    margin: 1.5rem;
+    border: 0.1rem solid transparent;
+    border-top: 0.15rem double #ffffff9a;
+    border-bottom: 0.15rem double #ffffff9a;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 1rem 1rem rgba(8, 3, 10, 0.5);
+}
+
+.title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 2rem;
+    float: left;
+    width: 100%;
+    margin: 1.5rem;
+    padding-left: 1rem;
+    border-bottom: 0.25rem double grey;
+}

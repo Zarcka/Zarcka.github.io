@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+/* 
+    ! Please myself of the future, Comment more the code.
+    ! Seriously it helps so much especially in js,
+    ! and also make this code more sorted to help me find the right element,
+    ! Thanks in advance!
+*/
+
+:root {
+    --content-text-color: #FFFFFF;
+}
+
+body,
+html {
+    position: relative;
+    overflow-x: hidden;
+}
+
+body {
+    background: linear-gradient(45deg, #120716, #09111a);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+body>* {
+    color: var(--content-text-color);
+    z-index: 1;
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: rgba(77, 126, 89, 0.1);
+    overflow: hidden;
+    border-bottom: 0.1rem solid #cccccc7a;
+}
+
+/* Style the title and links inside the navigation bar */
+
+.topnav .title {
+    display: inline-flex;
+    justify-content: baseline;
+    border: none;
+    padding: 10px 16px;
+    margin: 0;
+    height: 80%;
+}
+
+.topnav a {
+    float: right;
+    color: #cccccc;
+    text-align: center;
+    padding: 13.75px 16px;
+    text-decoration: none;
+    font-size: 27px;
+    font-family: 'Amatic SC', cursive;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: rgb(221, 221, 221);
+    color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.container {
+    z-index: 1;
+    font-family: 'Amatic SC', cursive;
+    font-size: 1.75rem;
+    font-weight: 900;
+}
+
+#Header {
+    z-index: 1;
+    height: max-content;
+    position: relative;
+    margin: 1rem 0 1rem 0;
+    border-bottom: 0.15rem solid #ffffff9a;
+    border-top: 0.15rem solid #ffffff9a;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+        url(../Assets/Img/Zarcka_Banner.png),
+
+        /* ! All the linear gradients after the url are used as a fallback in case the image is not loaded */
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.425);
+    transition: all 0.5s ease-out;
+}
+
+#Header::after,
+#Header::before {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 75%;
+    height: 100%;
+    transform: skew(15deg) translateX(-50%);
+    background-image: linear-gradient(120deg, #465a76, #8d73a9);
+    background-position: center;
+    /* opacity: 0.35; */
+    mix-blend-mode: color;
+    transition: all 400ms linear;
+}
+
+#Header:hover::after, #Header:hover::before {
+    transform: skew(-15deg) translateX(-50%);
+    height: 90%;
+    top: 5%;
+    width: 100%;
+}
+
+#Header:hover::after {
+    transform: skew(15deg) translateX(-50%);
+}
+
+#Header > * {
+    height: 35%;
+    font-weight: 500;
+    z-index: 100;
+    text-align: center;
+}
+
+#Header::before {
+    transform: skew(-15deg) translateX(-50%);
+    mix-blend-mode: multiply;
+}
+
+#Footer {
+    margin: 5rem 0 0 0;
+    border-top: 0.15rem solid #ffffff9a;
+    border-bottom: 0.05rem solid #cccccc7a;
+    background:
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: 100px 100px;
+}
+
+.content {
+    /* margin || padding: top left bottom right */
+    opacity: 87%;
+    z-index: 1;
+}
+
+.sections {
+    z-index: 5;
+    position: relative;
+    font-family: 'Nunito', sans-serif;
+    width: 90vw;
+    margin: 4rem 1rem 4rem 4vw;
+    border-top: 0.15rem double #ffffff9a;
+    border-bottom: 0.15rem double #ffffff9a;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: transform 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections::before, .sections::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+}
+
+.sections::before {
+    box-shadow: 1.5rem 2rem 0rem 0rem rgb(8, 3, 10);
+    transition: opacity 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections::after {
+    background:
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: 100px 100px;
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections:hover {
+    transform: scale3d(1.05, 1.05, 1.05);
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.sections:hover::after, .sections:hover::before {
+    opacity: 87%;
+    height: 100%;
+    top: 0;
+}
+
+#About_me>p {
+    margin: 1rem 1rem 4rem 4rem;
+    font-weight: 400;
+    font-size: 1.25rem;
+}
+
+#Interest .wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-row-gap: 3rem;
+    justify-items: center;
+    margin: 1rem 0 1rem 0;
+}
+
+.interests {
+    position: relative;
+    display: inline-flex;
+    font-weight: 400;
+    font-size: 1.25rem;
+    font-family: 'Nunito', sans-serif;
+    width: 25%;
+    min-width: 337px;
+    height: 15rem;
+    border: 0.25rem double white;
+    background-position: center;
+    background-size: 25rem;
+    background-color: #00122763;
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+    color: white;
+    text-decoration: none;
+}
+
+.interests:hover {
+    background-size: 30rem;
+    background-position-x: var(--x);
+    background-position-y: var(--y);
+    transform: perspective(1000px) scale3d(1.075, 1.075, 1.075);
+}
+
+.interests::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    box-shadow: 20px 20px 0px rgb(8, 3, 10);
+    border: 0.25rem double white;
+    opacity: 0;
+}
+
+.interests:hover::after {
+    opacity: 87%;
+}
+
+#Drawing.interests {
+    background-image: linear-gradient(to bottom, rgba(27, 0, 36, 0.5), rgba(21, 15, 31, 0.8)), url("../Assets/Img/Chaotic Creation drawing.jpg");
+}
+
+.title {
+    margin: 1rem 2rem 0 2rem;
+    padding: 0 0 0 1rem;
+    font-weight: 200;
+    border-bottom: 0.15rem solid #ebebeb;
+    font-family: 'Amatic SC', cursive;
+    font-size: 2rem;
+}
+
+#About_me .title::after {
+    content: " A summary";
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    opacity: 0.5;
+}
+
+/* 
+.treeFigure > * {
+    margin: 2rem 1rem 0 9rem;
+    max-width: 100%;
+    width: 15%;
+    height: auto;
+} */
+
+/* 
+@media (prefers-color-scheme: dark) {
+    img {
+        filter: brightness(.8) contrast(1.2);
+    }
+
+    body {
+        background: #121212;
+    }
+} */
+
+@media (width: 500px) {
+    #Name {
+        margin: 1rem 0rem 0 2rem;
+    }
+}
