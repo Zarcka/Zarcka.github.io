@@ -14,7 +14,7 @@
         linear-gradient(45deg, #271b35 25%, transparent 25%);
     background-size: 100px 100px;
     background-color: rgb(3, 0, 10);
-    transition: all 0.65s ease-out;
+    transition: all 850ms cubic-bezier(0, 1.2, 1, 1);
 }
 
 .transition.active {

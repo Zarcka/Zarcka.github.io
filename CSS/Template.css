@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+
+body,
+html {
+    position: relative;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #120716, #09111a);
+    color: white;
+    font-family: 'Amatic SC', cursive;
+}
+
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rainbow_gradient {
+    background-image: linear-gradient(90deg, rgba(255, 0, 0, 0.85), rgba(238, 255, 0, 0.85), rgba(0, 255, 30, 0.85), rgba(0, 255, 251, 0.85), rgba(21, 0, 255, 0.85));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: rgba(77, 126, 89, 0.1);
+    overflow: hidden;
+    border-bottom: 0.1rem solid #cccccc7a;
+    font-family: 'Amatic SC', cursive;
+}
+
+.topnav > * {
+    height: 100%;
+    display: inline-flex;
+    padding: 10px 16px;
+    font-size: 27px;
+
+}
+
+/* Style the title and links inside the navigation bar */
+.topnav .title {
+    border: none;
+    margin: 0;
+}
+
+.topnav a {
+    float: right;
+    color: #cccccc;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: rgb(221, 221, 221);
+    color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+#Header {
+    z-index: 1;
+    height: max-content;
+    position: relative;
+    margin: 1rem 0 1rem 0;
+    border-bottom: 0.15rem solid #ffffff9a ;
+    border-top: 0.15rem solid #ffffff9a ;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)),
+        var(--banner),
+        
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.425);
+    transition: transform 250ms linear, all 500ms ease-out;
+    font-size: 32px;
+}
+
+#Header > * {
+    height: 35%;
+    font-weight: 500;
+    z-index: 100;
+    text-align: center;
+}
+
+#Header::before, #Header::after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 75%;
+    height: 100%;
+    transform: skew(15deg) translateX(-50%);
+    background-image: linear-gradient(120deg, #465a76, #8d73a9);
+    background-position: center;
+    /* opacity: 0.35; */
+    mix-blend-mode: color;
+    transition: all 750ms cubic-bezier(0, 1.2, 1, 1);
+}
+
+#Header:hover::before, #Header:hover::after {
+    transform: skew(-15deg) translateX(-50%);
+    height: 90%;
+    top: 5%;
+    width: 100%;
+}
+
+#Header::before {
+    transform: skew(-15deg) translateX(-50%);
+    mix-blend-mode: multiply;
+}
+
+#Header:hover::after {
+    transform: skew(15deg) translateX(-50%);
+}
+
+.sections {
+    z-index: 5;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 2rem 3vw;
+    padding: 0 2rem 0 0;
+    font-family: 'Nunito', sans-serif;
+    border-top: 0.15rem double #ffffff9a;
+    border-bottom: 0.15rem double #ffffff9a;
+    background: rgba(255, 255, 255, 0.05);
+    transition: transform 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections::before, .sections::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    opacity: 0;
+}
+
+.sections::before {
+    box-shadow: 1.5rem 2rem 0rem 0rem rgb(8, 3, 10);
+    transition: opacity 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections::after {
+    background:
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: 100px 100px;
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+}
+
+.sections:hover {
+    transform: scale3d(1.05, 1.05, 1.05);
+    background-color: rgba(255, 255, 255, 0.075);
+}
+
+.sections:hover::after, .sections:hover::before {
+    opacity: 87%;
+    height: 100%;
+    top: 0;
+}
+
+.sections .title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 2rem;
+    float: left;
+    width: 100%;
+    margin: 1.5rem;
+    padding: 0 0 0 1rem;
+    border-bottom: 0.25rem double grey;
+}
