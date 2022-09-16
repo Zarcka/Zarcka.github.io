@@ -6,18 +6,21 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="color-scheme" content="dark light">
-        <link rel="stylesheet" href="./CSS/index.css">
         <link rel="stylesheet" href="./CSS/Template.css">
         <link rel="stylesheet" href="./CSS/Transitions.css">
+        <link rel="stylesheet" href="./CSS/index.css">
         <title>Zarcka || Michel</title>
     </head>
 
     <body>
         <div class="transition active"></div>
 
-        <nav class="topnav">
-            <h2 class="title">Placeholder Title</h2>
-            <a href="#About_me">About Me</a>
+        <nav id="Topnav">
+            <h2 class="title">Placeholder Text</h2>
+            <div class="links">
+                <a href="javascript:void(0)">Placeholder link</a>
+            </div>
+            <img src="./Assets/Icons/folder-tree-solid.svg" alt="Menu-Icon" class="icon" onclick="openMenu()" height="24px" width="24px">
         </nav>
 
         <header id="Header" class="container" style="--banner: url(../Assets/Img/Zarcka_Banner.png)">
@@ -26,9 +29,9 @@
             <p class="center-flex"> <strong>This project was made as a part of nothing except for being random</strong> </p>
         </header>
 
-        <section class="sections" id="About_me">
+        <section class="sections hidden" id="About_me">
             <h2 class="title">Who I am?</h2>
-            <p>
+            <p class="hidden">
                 <!-- TODO revise this paragraph, it just feels off
                     TODO Actually revise it
                 -->
@@ -43,9 +46,9 @@
             </p>
         </section>
 
-        <section id="Interest">
-            <h2 class="title">Interests</h2>
-            <div class="wrapper">
+        <section id="Interest" class="hidden">
+            <h2 class="title hidden">Interests</h2>
+            <div class="wrapper hidden">
                 <a href="./Interests/Art.html" id="Drawing" class="interests center-flex">Art</a>
                 <div class="interests center-flex">Test</div>
                 <div class="interests center-flex">Test</div>

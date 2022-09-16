@@ -1,6 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
 
+.hidden {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+    -webkit-transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+    -o-transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+    opacity: 0;
+}
+
+.hidden * {
+    opacity: inherit;
+    -webkit-transform: inherit;
+    transform: inherit;
+    transition: inherit;
+}
+
 body,
 html {
     position: relative;
@@ -48,52 +64,97 @@ body::before {
 }
 
 /* Add a black background color to the top navigation */
-.topnav {
-    background-color: rgba(21, 33, 48, 0.5);
+#Topnav {
+    z-index: 10;
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    height: 3.2rem;
+    background-color: rgb(21, 33, 48);
     overflow: hidden;
     border-bottom: 0.1rem solid #cccccc7a;
     font-family: 'Amatic SC', cursive;
+    transition: height 1s;
 }
 
-.topnav > * {
-    height: 100%;
-    display: inline-flex;
-    padding: 10px 16px;
+#Topnav * {
+    padding: 0.5rem 1rem;
     font-size: 27px;
-
-}
-
-/* Style the title and links inside the navigation bar */
-.topnav .title {
-    border: none;
     margin: 0;
 }
 
-.topnav a {
-    float: right;
+#Topnav .links {
+    margin: 1rem 0 0 0;
+    position: absolute;
+    top: 3rem;
+    width: 80vw;
+    opacity: 0;
+    transform: translateX(-100rem);
+    transition: all 0all 1s cubic-bezier(0, 1.2, 1, 1), opacity 0.3s;
+}
+
+#Topnav .icon {
+    margin: 0.4rem 1rem 0 0;
+    padding-left: 0;
+}
+
+#Topnav>h2 {
+    overflow: hidden;
+    margin-right: auto;
+}
+
+#Topnav a {
+    display: block;
     color: #cccccc;
-    text-align: center;
     text-decoration: none;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0all 1s cubic-bezier(0, 1.2, 1, 1) cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Change the color of links on hover */
-.topnav a:hover {
+#Topnav a:hover {
     background-color: rgb(221, 221, 221);
     color: black;
 }
 
 /* Add a color to the active/current link */
-.topnav a.active {
+#Topnav a.active {
     background-color: #04AA6D;
     color: white;
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+
+#Topnav.responsive {
+    height: 100vh;
+    overflow-y: scroll;
+    display: block;
+}
+
+#Topnav.responsive a:not(.icon) {
+    width: 100vw;
+    height: max-content;
+    float: none;
+    display: block;
+    text-align: left;
+}
+
+#Topnav.responsive .links {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0all 1s cubic-bezier(0, 1.2, 1, 1), opacity 0.5s 0.5s;
+}
+
+#Topnav.responsive .icon {
+    position: absolute;
+    top: 0;
+    right: -1.05rem;
 }
 
 #Header {
     z-index: 1;
     height: max-content;
     position: relative;
-    margin: 1rem 0 1rem 0;
+    margin: 5rem 0 1rem 0;
     border-bottom: 0.15rem solid #ffffff9a;
     border-top: 0.15rem solid #ffffff9a;
     background:
@@ -164,7 +225,7 @@ body::before {
     border-top: 0.15rem double #ffffff9a;
     border-bottom: 0.15rem double #ffffff9a;
     background: linear-gradient(90deg, rgba(45, 94, 102, var(--background-opacity)), rgba(65, 18, 18, var(--background-opacity)));
-    transition: transform 1s cubic-bezier(0, 1.2, 1, 1);
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
 }
 
 .sections:hover {

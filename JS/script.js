@@ -5,10 +5,17 @@
 
 //TODO | Comment more the code to help myself in the future.
 
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        entry.target.classList.toggle("hidden", !entry.isIntersecting);
+    })
+})
+
+const hiddenElems = document.querySelectorAll(".hidden");
 const header = document.querySelector("#Header");
 const interests = document.querySelectorAll(".interest");
 
-// /* I commented that part due to the lag when using an image as a background in CSS instead */
+//! /* I commented that part due to the lag when using an image as a background in CSS instead */
 
 // header.addEventListener("mousemove", (e) => {
 //     // Note: Do not even attempt to understand this code Zarcka or whatever nickname or name you are using now.
@@ -39,3 +46,12 @@ const interests = document.querySelectorAll(".interest");
 //         interest.style.setProperty("--y", Math.round(((e.clientY - ((top + interest.offsetHeight) / 2)) / (interest.offsetHeight / 2)) * 25 )+ "%");
 //     });
 // };
+
+hiddenElems.forEach((el) => observer.observe(el))
+
+/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+function openMenu() {
+    const navbar = document.getElementById("Topnav");
+
+    navbar.classList.toggle("responsive");
+}
