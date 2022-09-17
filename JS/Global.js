@@ -13,7 +13,6 @@ const observer = new IntersectionObserver((entries) => {
 
 const hiddenElems = document.querySelectorAll(".hidden");
 const header = document.querySelector("#Header");
-const interests = document.querySelectorAll(".interest");
 
 //! /* I commented that part due to the lag when using an image as a background in CSS instead */
 
