@@ -87,31 +87,17 @@ p {
     margin: 0;
 }
 
-#Topnav .links {
-    margin: 1rem 0 0 0;
-    position: absolute;
-    top: 3rem;
-    width: 80vw;
-    opacity: 0;
-    transform: translateX(-100rem);
-    transition: all 1s cubic-bezier(0, 1.2, 1, 1), opacity 0.3s;
-}
-
-#Topnav .icon {
-    margin: 0.4rem 1rem 0 0;
-    padding-left: 0;
-}
-
 #Topnav>h2 {
     overflow: hidden;
     margin-right: auto;
 }
 
 #Topnav a {
+    width: 85vw;
     display: block;
     color: #cccccc;
     text-decoration: none;
-    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Change the color of links on hover */
@@ -126,6 +112,28 @@ p {
     color: white;
 }
 
+#Topnav .icon {
+    margin: 0.4rem 1rem 0 0;
+    padding-left: 0;
+}
+
+#Topnav .links {
+    margin: 1rem 0 0 0;
+    position: absolute;
+    top: 3rem;
+    width: 80vw;
+    opacity: 0;
+    transform: translateX(-100rem);
+    transition: all 0.4s, opacity 0.5s 0.5s;
+}
+
+#Topnav .links > section {
+    width: max-content;
+    margin: 0 0 2rem 2rem;
+    border-top: 0.15rem solid white;
+    border-bottom: 0.15rem solid white;
+}
+
 /* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
 
 #Topnav.responsive {
@@ -135,7 +143,6 @@ p {
 }
 
 #Topnav.responsive a:not(.icon) {
-    width: 100vw;
     height: max-content;
     float: none;
     display: block;
@@ -144,8 +151,7 @@ p {
 
 #Topnav.responsive .links {
     opacity: 1;
-    transform: translateY(0);
-    transition: all 0.4s, opacity 0.5s 0.5s;
+    transform: translateX(0);
 }
 
 #Topnav.responsive .icon {
