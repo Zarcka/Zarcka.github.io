@@ -8,29 +8,17 @@
     ! Thanks in advance!
 */
 
+.content {
+    /* margin || padding: top left bottom right */
+    opacity: 87%;
+    z-index: 1;
+}
+
 .container {
     z-index: 1;
     font-family: 'Amatic SC', cursive;
     font-size: 1.75rem;
     font-weight: 900;
-}
-
-#Footer {
-    margin: 5rem 0 0 0;
-    border-top: 0.15rem solid #ffffff9a;
-    border-bottom: 0.05rem solid #cccccc7a;
-    background:
-        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
-        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
-        linear-gradient(315deg, #333333c7 25%, transparent 25%),
-        linear-gradient(45deg, #33333342 25%, transparent 25%);
-    background-size: 100px 100px;
-}
-
-.content {
-    /* margin || padding: top left bottom right */
-    opacity: 87%;
-    z-index: 1;
 }
 
 #About_me>p {
@@ -66,6 +54,7 @@
     min-width: 337px;
     height: 15rem;
     border: 0.25rem double white;
+    background-image: linear-gradient(to bottom, rgba(27, 0, 36, 0.5), rgba(21, 15, 31, 0.8)), var(--banner);
     background-position: center;
     background-size: 25rem;
     background-color: #00122763;
@@ -79,6 +68,7 @@
     background-position-x: var(--x);
     background-position-y: var(--y);
     transform: perspective(1000px) scale3d(1.075, 1.075, 1.075);
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
 }
 
 .interests::after {
@@ -96,15 +86,16 @@
     opacity: 87%;
 }
 
-#Drawing.interests {
-    background-image: linear-gradient(to bottom, rgba(27, 0, 36, 0.5), rgba(21, 15, 31, 0.8)), url("../Assets/Img/Chaotic Creation drawing.jpg");
-}
-
-#About_me .title::after {
-    content: " A summary";
-    margin-left: 1rem;
-    font-size: 1.5rem;
-    opacity: 0.5;
+#Footer {
+    margin: 5rem 0 0 0;
+    border-top: 0.15rem solid #ffffff9a;
+    border-bottom: 0.05rem solid #cccccc7a;
+    background:
+        linear-gradient(135deg, #333333c7 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #33333342 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #333333c7 25%, transparent 25%),
+        linear-gradient(45deg, #33333342 25%, transparent 25%);
+    background-size: 100px 100px;
 }
 
 /* 
