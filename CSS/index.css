@@ -21,69 +21,67 @@
     font-weight: 900;
 }
 
-#About_me>p {
-    margin: 1rem 1rem 4rem 4rem;
-    font-weight: 400;
-    font-size: 1.25rem;
-}
-
-#Interest .title {
-    font-family: 'Amatic SC', cursive;
-    font-size: 2rem;
-    margin: 1.5rem;
-    padding: 0 0 0 1rem;
-    font-weight: 200;
-    border-bottom: 0.15rem solid #ebebeb;
-}
-
-#Interest .wrapper {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    grid-row-gap: 3rem;
-    justify-items: center;
-    margin: 1rem 0 1rem 0;
-}
-
 .interests {
+    z-index: 20;
     position: relative;
     display: inline-flex;
+    justify-content: flex-start;
     font-weight: 400;
     font-size: 1.25rem;
     font-family: 'Nunito', sans-serif;
-    width: 25%;
+    width: 90%;
     min-width: 337px;
     height: 15rem;
-    border: 0.25rem double white;
-    background-image: linear-gradient(to bottom, rgba(27, 0, 36, 0.5), rgba(21, 15, 31, 0.8)), var(--banner);
-    background-position: center;
-    background-size: 25rem;
-    background-color: #00122763;
-    transition: all 1s cubic-bezier(0, 1.2, 1, 1), transform 1s calc(var(--n, 0) * 100ms) cubic-bezier(0, 1.2, 1, 1), opacity 1s calc(var(--n, 0) * 100ms) cubic-bezier(0, 1.2, 1, 1);
+    border-top: 0.25rem double white;
+    border-bottom: 0.25rem double white;
+    background-image: var(--banner);
+    transition: 
+        all 1s cubic-bezier(0, 1.2, 1, 1),
+        transform 1s calc(var(--n, 0) * 100ms) cubic-bezier(0, 1.2, 1, 1),
+        opacity 1s calc(var(--n, 0) * 100ms) cubic-bezier(0, 1.2, 1, 1);
     color: white;
     text-decoration: none;
 }
 
+.interests * {
+    z-index: 20;
+}
+
+.interests p {
+    margin: 0 0 0 15%;
+}
+
 .interests:hover {
-    background-size: 30rem;
-    background-position-x: var(--x);
-    background-position-y: var(--y);
-    transform: perspective(1000px) scale3d(1.075, 1.075, 1.075);
-    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
+    scale: 1.05;
+}
+
+.interests::before {
+    content: "";
+    z-index: -10;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(135deg, #210e25 25%, transparent 25%) -50px 0,
+        linear-gradient(225deg, #492f5f 25%, transparent 25%) -50px 0,
+        linear-gradient(315deg, #210e25 25%, transparent 25%),
+        linear-gradient(45deg, #492f5f 25%, transparent 25%);
+    opacity: 0.75;
 }
 
 .interests::after {
     content: "";
     position: absolute;
-    z-index: -1;
+    z-index: 1;
     width: 100%;
     height: 100%;
-    box-shadow: 20px 20px 0px rgb(8, 3, 10);
-    border: 0.25rem double white;
-    opacity: 0;
+    background-image: linear-gradient(90deg, rgba(45, 94, 102, 1), rgba(95, 34, 85, 1));
+    opacity: 0.45;
+    transition: all 1s cubic-bezier(0, 1.2, 1, 1);
 }
 
 .interests:hover::after {
-    opacity: 87%;
+    opacity: 0.65;
 }
 
 #Footer {
@@ -96,6 +94,34 @@
         linear-gradient(315deg, #333333c7 25%, transparent 25%),
         linear-gradient(45deg, #33333342 25%, transparent 25%);
     background-size: 100px 100px;
+}
+
+#Footer * {
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+#Footer h4 {
+    font-family: 'Amatic SC', cursive;
+    font-size: 1.8rem;
+}
+
+#Footer > * {
+    padding: 0 0 0 1rem;
+}
+
+#Footer > div {
+    margin: 1rem;
+    padding: 1rem 0;
+    border-top: 0.15rem solid white;
+    border-bottom: 0.15rem solid white;
+}
+
+#Footer > div img {
+    margin-right: 1rem;
 }
 
 /* 

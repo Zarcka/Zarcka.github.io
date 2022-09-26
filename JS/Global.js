@@ -47,10 +47,3 @@ const header = document.querySelector("#Header");
 // };
 
 hiddenElems.forEach((el) => observer.observe(el))
-
-/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
-function openMenu() {
-    const navbar = document.querySelector("#Topnav");
-
-    navbar.classList.toggle("responsive");
-}

@@ -17,7 +17,7 @@
 
         <script src="/Components/Top-navbar.js"></script>
 
-        <header id="Header" class="container" style="--banner: url(../Assets/Img/Zarcka_Banner.png)">
+        <header id="Header" class="container" style="--banner: url(/Assets/Img/Zarcka_Banner.png)">
             <h1 id="Welcome" class="content">Welcome to my website, my name Zarcka</h1>
             <br>
             <p>
@@ -27,8 +27,8 @@
             </p>
         </header>
 
-        <section class="sections hidden" id="About_me">
-            <h2 class="title">About me</h2>
+        <section class="sections sections--background hidden" id="About_me">
+            <h2 class="sections__title">About me</h2>
             <p class="hidden">
                 She/them,
                 <br>
@@ -45,20 +45,27 @@
             </p>
         </section>
 
-        <section id="Interest" class="hidden">
-            <h2 class="title hidden">Interests</h2>
-            <div class="wrapper">
-                <a href="/Interests/Art.html" id="Drawing" class="interests center-flex" style="--n: 1; --banner: url('/Assets/Img/Chaotic Creation drawing.jpg')">Art</a>
-                <a href="/Interests/coding.html" id="Coding" class="interests center-flex hidden" style="--n: 2; --banner: url('/Assets/Img/Personal_Website_screenshot.png')">Coding</a>
-                <div class="interests center-flex hidden" style="--n: 3">Test</div>
-                <div class="interests center-flex hidden" style="--n: 4">Test</div>
-                <div class="interests center-flex hidden" style="--n: 5">Test</div>
-                <div class="interests center-flex hidden" style="--n: 6">Test</div>
+        <section id="Interest" class="sections hidden">
+            <h2 class="sections__title hidden">Interests</h2>
+            <div class="grid-wrapper">
+                <a href="/Interests/art.html" id="Drawing" class="interests center-flex" 
+                style="--n: 1;">
+                    <p>Art</p>
+                </a>
+                <a href="/Interests/coding.html" id="Coding" class="interests center-flex hidden" 
+                style="--n: 2; --banner: url(/Assets/Img/Personal_Website_screenshot.png)">
+                    <p>Coding</p>
+                </a>
             </div>
         </section>
 
         <footer id="Footer" class="container">
-            <p class="content center-flex">Thanks for checking</p>
+            <h4 class="content">Thanks for checking</h4>
+            <div>
+                <img src="/Assets/Icons/github.svg" alt="github logo" width="24px" height="24px"><a href="https://github.com/Zarcka">Github</a>
+                <br>
+                <div><img src="/Assets/Icons/discord.svg" alt="discord logo" width="24px" height="24px">Zarcka#4167</div>
+            </div>
         </footer>
 
         <script src="./JS/Transitions.js"></script>
