@@ -271,7 +271,7 @@ p {
     font-size: 1.25rem;
 }
 
-.sections > .grid-wrapper {
+.sections > .sections__grid-container {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
