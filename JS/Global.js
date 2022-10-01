@@ -5,14 +5,90 @@
 
 //TODO | Comment more the code to help myself in the future.
 
+import * as THREE from "./libs/three.js/three.module.min.js";
+
+const hiddenElems = document.querySelectorAll(".hidden");
 const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         entry.target.classList.toggle("hidden", !entry.isIntersecting);
     })
-})
+});
 
-const hiddenElems = document.querySelectorAll(".hidden");
-const header = document.querySelector("#Header");
+hiddenElems.forEach((el) => observer.observe(el));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector("#Background_3D"),
+    alpha: true
+});
+
+const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+const material = new THREE.MeshBasicMaterial({
+    color: 0xFF6347,
+    wireframe: true
+});
+
+const gridHelper = new THREE.GridHelper(200, 50);
+const torus = new THREE.Mesh(geometry, material);
+
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+camera.position.setZ(30);
+renderer.render(scene, camera);
+
+renderer.setClearColor( 0xffffff, 0 ); // white background - replace ffffff with any hex color
+scene.add(gridHelper);
+scene.add(torus);
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    torus.rotation.x += 0.01;
+    torus.rotation.y += 0.0002;
+    torus.rotation.z += 0.0002;
+
+    renderer.render(scene, camera);
+};
+
+animate();
+
+function addStar() {
+    const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+    const material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true
+    });
+    
+    const star = new THREE.Mesh(geometry, material);
+    const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+
+    star.position.set(x, y, z);
+    scene.add(star);
+}
+
+Array(200).fill().forEach(addStar);
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize(){
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+function moveCamera () {
+    const { top } = document.body.getBoundingClientRect();
+
+    camera.position.z = top * -0.01;
+    camera.position.x = top * -0.0002;
+    camera.position.y = top * -0.0002;
+}
+
+document.body.onscroll = moveCamera
 
 //! /* I commented that part due to the lag when using an image as a background in CSS instead */
 
@@ -45,5 +121,3 @@ const header = document.querySelector("#Header");
 //         interest.style.setProperty("--y", Math.round(((e.clientY - ((top + interest.offsetHeight) / 2)) / (interest.offsetHeight / 2)) * 25 )+ "%");
 //     });
 // };
-
-hiddenElems.forEach((el) => observer.observe(el))
