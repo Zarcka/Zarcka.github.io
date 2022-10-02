@@ -53,6 +53,8 @@ scene.add(moonSphere);
 moonSphere.position.x = 30;
 moonSphere.position.y = 10;
 
+let turning_back;
+
 function animate() {
     requestAnimationFrame(animate);
     
@@ -60,31 +62,39 @@ function animate() {
     torus.rotation.y += 0.0002;
     torus.rotation.z += 0.0002;
 
-    if (camera.position.z <= -10 && camera.position.x <= -10 && camera.position.y <= -10) {
-        for (let i = -10; i < 11; i += 0.1) {
-            camera.position.z = i;
-            camera.position.x = i;
-            camera.position.y = i;
-            camera.rotation.z = 0;
-            camera.rotation.x = 0;
-            camera.rotation.y = 0;
-        }
+    /*
+    Checks that the camera's X, Y, Z positions are smaller or equal to -10.
+    When turning_back is true the camera's position will increase till they are greater than 20,
+    this will create a looped animation
+    */
+    if (camera.position.z <= -10 && camera.position.x <= -10 && camera.position.y <= -10 || turning_back) {
+        /*
+        turning_back is a boolean, as long the camera's X, Y, Z position is smaller or equal to 20,
+        the camera positions will get more far from the center, when the camera's positions are greater than 20,
+        the turning_back value will be false as the condition is no more met
+        */
+        turning_back = camera.position.z <= 20 && camera.position.x <= 20 && camera.position.y <= 20;
+        camera.position.z += 0.1;
+        camera.position.x += 0.02;
+        camera.position.y += 0.02;
     }
     else {
+        turning_back = false;
         camera.position.z -= 0.1;
         camera.position.x -= 0.02;
         camera.position.y -= 0.02;
-        camera.rotation.z += -0.01;
-        camera.rotation.x += -0.0002;
-        camera.rotation.y += -0.0002;
     }
 
+    camera.rotation.z += -0.01;
+    camera.rotation.x += -0.0002;
+    camera.rotation.y += -0.0002;
 
     renderer.render(scene, camera);
 };
 
 animate();
 
+// Creates a sphere and add it to the scene
 function addStar() {
     const geometry = new THREE.SphereGeometry(0.25, 24, 24);
     const material = new THREE.MeshBasicMaterial({
@@ -99,6 +109,7 @@ function addStar() {
     scene.add(star);
 }
 
+// Use the Array() constructor to create an array and use the fill() method with the forEach() method to add 200 stars with addStar() function
 Array(200).fill().forEach(addStar);
 
 window.addEventListener( 'resize', onWindowResize, false );
