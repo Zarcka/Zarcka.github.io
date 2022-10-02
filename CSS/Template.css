@@ -24,12 +24,12 @@ html {
 }
 
 body {
-    z-index: -20;
+    z-index: -9;
     overflow-x: hidden;
     width: 100%;
     margin: 0;
     padding: 0;
-    background: linear-gradient(90deg, #202c4c 0%, #381238 100%);
+    background: linear-gradient(90deg, #202c4c75 0%, #38123879 100%);
     color: white;
     font-family: 'Amatic SC', cursive;
 }
