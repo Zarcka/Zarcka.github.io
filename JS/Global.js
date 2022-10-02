@@ -32,21 +32,53 @@ const material = new THREE.MeshBasicMaterial({
 const gridHelper = new THREE.GridHelper(200, 50);
 const torus = new THREE.Mesh(geometry, material);
 
+const moonSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(6, 64, 64),
+    new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true
+    })
+);
+
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(30);
+camera.position.z = 30;
 renderer.render(scene, camera);
 
 scene.background = new THREE.Color( 0x202c4c ); // replace value after 0x with any hex color
 scene.add(gridHelper);
 scene.add(torus);
+scene.add(moonSphere);
+
+moonSphere.position.x = 30;
+moonSphere.position.y = 10;
 
 function animate() {
     requestAnimationFrame(animate);
-
+    
     torus.rotation.x += 0.01;
     torus.rotation.y += 0.0002;
     torus.rotation.z += 0.0002;
+
+    if (camera.position.z <= -10 && camera.position.x <= -10 && camera.position.y <= -10) {
+        for (let i = -10; i < 11; i += 0.1) {
+            camera.position.z = i;
+            camera.position.x = i;
+            camera.position.y = i;
+            camera.rotation.z = 0;
+            camera.rotation.x = 0;
+            camera.rotation.y = 0;
+        }
+    }
+    else {
+        camera.position.z -= 0.1;
+        camera.position.x -= 0.02;
+        camera.position.y -= 0.02;
+        camera.rotation.z += -0.01;
+        camera.rotation.x += -0.0002;
+        camera.rotation.y += -0.0002;
+    }
+
 
     renderer.render(scene, camera);
 };
@@ -79,16 +111,6 @@ function onWindowResize(){
     renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
-
-function moveCamera () {
-    const { top } = document.body.getBoundingClientRect();
-
-    camera.position.z = top * -0.01;
-    camera.position.x = top * -0.0002;
-    camera.position.y = top * -0.0002;
-}
-
-document.body.onscroll = moveCamera
 
 //! /* I commented that part due to the lag when using an image as a background in CSS instead */
 
