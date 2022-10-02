@@ -37,7 +37,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
 renderer.render(scene, camera);
 
-renderer.setClearColor( 0xffffff, 0 ); // white background - replace ffffff with any hex color
+scene.background = new THREE.Color( 0x202c4c ); // replace value after 0x with any hex color
 scene.add(gridHelper);
 scene.add(torus);
 
