@@ -1,0 +1,79 @@
+---
+import "../../src/styles/Fonts/DM_Serif_Display.css";
+import "../../src/styles/Fonts/Poppins.css";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style is:global>
+	html {
+		scroll-behavior: smooth;
+	}
+	html::-webkit-scrollbar {
+		background-color: var(--secondary-light-clr);
+	}
+	html::-webkit-scrollbar-thumb {
+		scrollbar-color: var(--accent-lighter-clr);
+	}
+	@supports (scrollbar-color: var(--bg-dark-clr) var(--bg-light-clr)) {
+		html {
+			scrollbar-color: var(--accent-lighter-clr) var(--secondary-light-clr);
+		}
+	}
+	body {
+		--expanded-navbar-width: 12rem;
+		--contracted-navbar-width: 3rem;
+		--navbar-width: var(--expanded-navbar-width);
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-areas: 
+			"content navbar" 
+			"content navbar";
+		grid-template-columns: 1fr var(--navbar-width);
+		grid-template-rows: 3rem 1fr;
+		background: var(--bg-clr);
+		color: var(--text-light-clr);
+		font-size: calc(1.1rem + 0.075vw + 0.075vh);
+		font-family: "Poppins";
+		letter-spacing: 0.025rem;
+		line-height: 1.75;
+		transition: 400ms all cubic-bezier(1,0,0,1);
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+	@media (max-width: 63.5rem) or (max-height: 38.125rem) {
+		body {
+			grid-template-areas: 
+				"navbar  navbar " 
+				"content content";
+		}
+	}
+</style>

@@ -1,0 +1,1039 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import artwork1 from "../Images/artwork1.jpg";
+import artwork2 from "../Images/artwork2.jpg";
+import artwork3 from "../Images/artwork3.jpg";
+import artwork4 from "../Images/artwork4.jpg";
+---
+
+<script>
+	const navMenuButton: Element = document.querySelector("#nav-menu-button");
+	const navbarButton: Element = document.querySelector("#navbar-button");
+
+	function toggleAriaExpandedElem (elem: Element) {
+		let ariaExpanded = elem.getAttribute("aria-expanded");
+		let controlledElem = document.getElementById(elem.getAttribute("aria-controls"));
+
+		if (ariaExpanded == "false") {
+			elem.setAttribute("aria-expanded", "true");
+			controlledElem.classList.add("expanded");
+		}
+		else {
+			elem.setAttribute("aria-expanded", "false");
+			controlledElem.classList.remove("expanded");
+		}
+	}
+
+	navMenuButton.addEventListener("click", () => { 
+		toggleAriaExpandedElem(navMenuButton);
+		
+		let ariaExpanded = navMenuButton.getAttribute("aria-expanded");
+		// SRText stands for Screen Reader Text
+		const SRText = document.querySelector("#nav-menu-button > .visually-hidden");
+
+		if (ariaExpanded == "false") {
+			SRText.textContent = SRText.getAttribute("data-minimised-text");
+		}
+		else {
+			SRText.textContent = SRText.getAttribute("data-maximised-text");
+		}
+	}, false);
+
+	navbarButton.addEventListener("click", () => {
+		toggleAriaExpandedElem(navbarButton);
+
+		let ariaExpanded = navbarButton.getAttribute("aria-expanded");
+		const hiddenText = document.querySelector("#navbar-button > .visually-hidden");
+
+		if (ariaExpanded == "false") {
+			document.body.style.setProperty("--navbar-width", "var(--contracted-navbar-width)");
+			hiddenText.textContent = hiddenText.getAttribute("data-minimised-text");
+		}
+		else {
+			document.body.style.setProperty("--navbar-width", "var(--expanded-navbar-width)");
+			hiddenText.textContent = hiddenText.getAttribute("data-maximised-text");
+		}
+	}, false);
+</script>
+
+<Layout title="Zarcka's Portfolio">
+	<a href="#main" id="main-skip-link">Skip to main content</a>
+	<div id="navbar" class="expanded">
+		<nav id="nav-menu">
+			<button id="nav-menu-button" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Navigation Menu Button">
+				<span aria-hidden="true">&plus;</span>
+				<span class="visually-hidden" data-maximised-text="Close" data-minimised-text="Open">Open</span>
+				Menu
+			</button>
+			<ul id="nav-list">
+				<li class="nav-item">
+					<a href="#intro" class="nav-link">Home</a>
+				</li>
+				<li class="nav-item">
+					<a href="#about" class="nav-link">About</a>
+				</li>
+				<li class="nav-item">
+					<a href="#projects" class="nav-link">Projects</a>
+				</li>
+				<li class="nav-item">
+					<a href="#footer" class="nav-link">Contacts</a>
+				</li>
+			</ul>
+		</nav>
+		<div class="secondary"></div>
+		<div class="accent">
+			<button id="navbar-button" type="button" aria-expanded="true" aria-controls="navbar">
+				<span 
+					class="visually-hidden" 
+					data-maximised-text="Hide navigation bar" 
+					data-minimised-text="Open navigation bar">Hide navigation bar</span> 
+				<span aria-hidden="true">&gt;</span>
+			</button>
+		</div>
+	</div>
+	<main id="main">
+		<header id="intro">
+			<h1 id="title">
+				<span class="primary-underline">Zarcka,</span>
+				<br />
+				<span class="secondary-underline">Web Designer</span>
+				<svg
+					width="115"
+					height="107"
+					viewBox="0 0 115 107"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-hidden="true"
+					focusable="false"
+					class="sparkles"
+				>
+					<path
+						d="M2.5 56C20 49 30.2273 42.6177 33 16C37.9908 42.6177 45.9175 53.5281 63.1081 56.8553C47.0265 62.4007 36.2131 71.2733 33.1631 97.3365C27.3405 66.837 18.027 59.8818 2.5 56Z"
+						fill="#D4764A"></path>
+					<path
+						d="M33 13.6667C30.4504 40.4706 22.8145 49.1602 1 56.0077"
+						stroke="#D4764A"></path>
+					<path
+						d="M1.48489 56.0077C21.4355 59.4331 27.9033 69.6921 33.0001 99.0001"
+						stroke="#D4764A"></path>
+					<path
+						d="M33 99.0001C35.5496 72.1962 43.1856 63.5066 65 56.6591"
+						stroke="#D4764A"></path>
+					<path
+						d="M64.5152 56.6591C44.5646 53.2337 38.0968 42.9747 33 13.6667"
+						stroke="#D4764A"></path>
+					<path
+						d="M72.4375 28.4653C82.5 25.8403 92.125 19.7153 92.5933 1C96.0707 19.6324 101.75 27.5903 113.458 28.9486C102.253 32.8304 95.1251 38.6585 93 56.9028C89.5 35.9028 83.2561 31.1825 72.4375 28.4653Z"
+						fill="#F4B8A9"></path>
+					<path
+						d="M93 1C91.3268 18.5901 86.3157 24.2926 72 28.7863"
+						stroke="#F4B8A9"></path>
+					<path
+						d="M72.3183 28.7863C85.4109 31.0342 89.6554 37.7666 93.0001 57"
+						stroke="#F4B8A9"></path>
+					<path
+						d="M93 57C94.6732 39.4099 99.6843 33.7074 114 29.2137"
+						stroke="#F4B8A9"></path>
+					<path
+						d="M113.682 29.2137C100.589 26.9658 96.3448 20.2334 93.0001 1"
+						stroke="#F4B8A9"></path>
+					<path
+						d="M63.3125 85.618C70.5 83.7431 77.375 79.3681 77.7095 66C80.1933 79.3089 84.25 84.993 92.6127 85.9633C84.6091 88.736 79.5179 92.8989 78 105.931C75.5 90.9305 71.0401 87.5589 63.3125 85.618Z"
+						fill="#7EB9C2"></path>
+					<path
+						d="M78 66C76.8049 78.5643 73.2255 82.6376 63 85.8473"
+						stroke="#7EB9C2"></path>
+					<path
+						d="M63.2274 85.8473C72.5792 87.453 75.611 92.2619 78.0001 106"
+						stroke="#7EB9C2"></path>
+					<path
+						d="M78 106C79.1951 93.4357 82.7745 89.3624 93 86.1527"
+						stroke="#7EB9C2"></path>
+					<path
+						d="M92.7728 86.1527C83.4209 84.547 80.3892 79.7381 78.0001 66"
+						stroke="#7EB9C2"></path>
+				</svg>
+			</h1>
+			<p>
+				Welcome to my corner of the Internet, a little museum built by me! You can learn one thing or two about me, see some of my artworks and I hope you enjoy your time and get to know me a little bit better.
+			</p>
+			<a href="#about" class="primary-button">About Me<span aria-hidden="true" style="margin-left: 1ch">&#10095;</span></a>
+		</header>
+		<section id="about">
+			<section id="self-description" class="subsection">
+				<h2>About Me</h2>
+				<p>
+					Hi, my name's Zarcka! What do you think of it?
+					<br>
+					I am someone who's a bit creative, a little silly and have a love for anything of cute such as cats :3, dogs and plushies ^-^. Moreover, I am a front-end developer with a bit of experience in web design but I am also learning Haskell and Computer Science; an occasional artist with a specialty in abstract drawings using average writing pencils or pens; and lastly, I like to play osu, a rythm-game and click on circles or master the 4 keys of osu!mania; I joined osu in Januray 2023 and been playing casually but now, I play more often and with a greater focus on improving.
+				</p>
+			</section>
+			<section id="hobbies" class="subsection">
+				<h3>Hobbies</h3>
+				<ul class="text-list">
+					<li class="list-item">Programming</li>
+					<li class="list-item">Drawing</li>
+					<li class="list-item">Playing osu!</li>
+					<li class="list-item">Playing sudoku</li>
+				</ul>
+			</section>
+			<section id="likes-dislikes" class="subsection">
+				<section id="likes" class="subsection">
+					<h3>&plus; Likes</h3>
+					<ul class="text-list">
+						<li class="list-item">Cute plushies</li>
+						<li class="list-item">
+							Cats and dogs
+<pre class="text-art" aria-hidden="true">
+        へ   ♡   ╱|、
+    ૮ -  ՛)     (` - 7
+    / ⁻  ៸|      |、⁻〵
+乀 (ˍ, ل ل       じしˍ,)ノ
+</pre>
+						</li>
+						<li class="list-item">Other cute animals</li>
+						<li class="list-item">Chocolate</li>
+						<li class="list-item">Text art or ASCII art</li>
+					</ul>
+				</section>
+				<section id="dislikes" class="subsection">
+					<h3>&minus; Dislikes</h3>
+					<ul class="text-list">
+						<li class="list-item">Feeling lonely for long periods of time</li>
+						<li class="list-item">Feeling depressed</li>
+						<li class="list-item">Being tired but can't fall asleep</li>
+						<li class="list-item">Realistic blood, gore, etc <i>(I am a bit senstive to those kind of things)</i></li>
+					</ul>
+				</section>
+			</section>
+			<section id="skills" class="subsection">
+				<h3>Skills</h3>
+				<ul class="skills-list">
+					<li class="list-item">
+						HTML
+						<span class="progress-bar" style="--val: 90%"></span>
+					</li>
+					<li class="list-item">
+						CSS
+						<span class="progress-bar" style="--val: 80%"></span>
+					</li>
+					<li class="list-item">
+						JS
+						<span class="progress-bar" style="--val: 30%"></span>
+					</li>
+				</ul>
+			</section>
+		</section>
+		<section id="projects">
+			<section id="drawings" class="subsection">
+				<h2>Drawings</h2>
+				<div class="img-gallery">
+					<Image 
+						src={artwork1} 
+						alt="A pencil drawing of tentacles with eyes coming out of the center using small dots and lines" 
+						class="gallery-item" 
+					/>
+					<Image 
+						src={artwork2} 
+						alt="An abstract drawing using pencil" 
+						class="gallery-item" 
+					/>
+					<Image 
+						src={artwork3} 
+						alt="An incomplete abstract drawing using pencil" 
+						class="gallery-item" 
+					/>
+					<Image 
+						src={artwork4} 
+						alt="An incomplete drawing consisting of small dots of different colours using pens" 
+						class="gallery-item" 
+					/>
+				</div>
+			</section>
+		</section>
+		<footer id="footer">
+			<section id="footer-note" class="subsection">
+				<h3>Thank you for reading!</h3>
+				<p>
+					This website took around 2 months to be completed, It was a lot work from start to finish and I would like to thank a more experienced friend for his critic on the design, he is a cool guy. Now that it is done, I am satisified and can finally work on other projects I had in mind for a while.
+				</p>
+			</section>
+			<section id="contacts" class="subsection">
+				<h3>Contacts</h3>
+				<ul class="contacts-list">
+					<li class="list-item">Discord: <b>Zarcka#4167</b></li>
+					<li class="list-item">Osu: <a href="https://osu.ppy.sh/users/32690558" class="external-link"><b>Zarcka</b></a></li>
+					<li class="list-item">Github: <a href="https://github.com/Zarcka/" class="external-link"><b>Zarcka</b></a></li>
+				</ul>
+			</section>
+		</footer>
+	</main>
+</Layout>
+
+<style>
+	:root {
+		/* Text colour - START */
+		--text-clr: #39150b;
+		--text-dark-clr: #331109;
+		--text-darker-clr: #290c06;
+		--text-light-clr: #5b331c;
+		--text-lighter-clr: #734932;
+		/* Text colour - END */
+
+		/* Background colour - START */
+		--bg-clr: #fbe9e4;
+		--bg-dark-clr: #e0c0b8;
+		--bg-darker-clr: #ba8a7f;
+		--bg-light-clr: #fcf2ed;
+		--bg-lighter-clr: #fcf7f2;
+		/* Background colour - END */
+
+		/* Primary colour - START */
+		--primary-clr: #0d5263;
+		--primary-dark-clr: #0b4759;
+		--primary-darker-clr: #07364a;
+		--primary-light-clr: #398391;
+		--primary-lighter-clr: #7eb9c2;
+		/* Primary colour - END */
+
+		/* Secondary colour - START */
+		--secondary-clr: #f4b8a9;
+		--secondary-dark-clr: #db9788;
+		--secondary-darker-clr: #b8705f;
+		--secondary-light-clr: #f7d2c1;
+		--secondary-lighter-clr: #fae9dc;
+		/* Secondary colour - END */
+
+		/* Accent colour - START */
+		--accent-clr: #be310e;
+		--accent-dark-clr: #ad280a;
+		--accent-darker-clr: #8f2007;
+		--accent-light-clr: #d4764a;
+		--accent-lighter-clr: #e6b591;
+		/* Accent colour - END */
+
+		--section-border-width: 1px;
+		--section-border-clr: var(--text-lighter-clr);
+		--section-border-style: solid;
+		--section-border: var(--section-border-width) var(--section-border-clr) var(--section-border-style);
+
+		--subsection-border-width: 1px;
+		--subsection-border-clr: var(--text-lighter-clr);
+		--subsection-border-style: dashed;
+		--subsection-border: var(--subsection-border-width) var(--subsection-border-clr) var(--subsection-border-style);
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+	
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 0;
+		font-family: "DM Serif Display";
+		text-decoration: underline var(--accent-lighter-clr) 0.15em;
+		text-decoration-skip-ink: none;
+		text-underline-offset: 0em;
+		line-height: initial;
+		color: var(--text-clr);
+		transition: 200ms all cubic-bezier(0.18,0.89,0.32,1.28), 200ms background-color cubic-bezier(0.22,0.61,0.36,1);
+	}
+
+	h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+		text-decoration-thickness: 0.35em;
+		text-underline-offset: -0.2em;
+	}
+
+	h1 {
+		position: relative;
+		margin: calc(3.75em - 27.5vh) 0 0.45em 0;
+		font-size: calc(2rem + 1.6vh + 1.6vw);
+		text-decoration-color: var(--accent-lighter-clr);
+		letter-spacing: 0;
+		line-height: 1.3;
+	}
+
+	h2 {
+		margin-bottom: 1rem;
+		font-size: calc(1.75rem + 0.6vh + 0.6vw);
+		text-decoration-color: var(--accent-light-clr);
+	}
+
+	section:not(.subsection) > h2 {
+		font-size: calc(1.75rem + 1vh + 1vw);
+	}
+
+	h3 {
+		font-size: calc(1.5rem + 0.35vh + 0.35vw);
+		margin-bottom: 1rem;
+	}
+
+	p {
+		max-width: 80ch;
+		margin: 0;
+	}
+
+	a:focus-visible, button:focus-visible {
+		outline: 4px var(--accent-light-clr) solid;
+	}
+
+	/*
+		Style the skip links to be fixed to the 
+		top of the page, and have an initial 
+		negative Y-axis value.
+	*/
+	#main-skip-link {
+		background: var(--text-darker-clr);
+		color: var(--bg-lighter-clr);
+		left: 0;
+		padding: .75em;
+		position: fixed;
+		top: 0;
+		transform: translateY(-10em);
+		transition: transform 200ms ease-in-out;
+	}
+
+	/*
+		Upon focus of the skip link, transition
+		it into view by returning it's Y-axis to
+		the default 0 value.
+	*/
+	#main-skip-link:focus {
+		transform: translateY(0em);
+	}
+
+	.visually-hidden {
+		clip: rect(0 0 0 0); 
+		clip-path: inset(50%);
+		height: 1px;
+		overflow: hidden;
+		position: absolute;
+		white-space: nowrap; 
+		width: 1px;
+	}
+
+	#navbar {
+		z-index: 100;
+		height: 100vh;
+		grid-area: navbar;
+		position: sticky;
+		top: 0;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	#navbar > .secondary {
+		width: 100%;
+		height: 30%;
+		flex: 3 1 0;
+		background-color: var(--secondary-clr);
+	}
+
+	#navbar > .accent {
+		width: 100%;
+		height: 10%;
+		flex: 1 1 0;
+		background-color: var(--accent-clr);
+	}
+
+	#navbar-button {
+		float: right;
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		color: var(--bg-lighter-clr);
+		font-family: inherit;
+		font-size: 1.5em;
+		background-color: var(--accent-clr);
+		background-size: 100% 100%;
+		border: none;
+		border-left: 4px var(--accent-light-clr) solid;
+		cursor: pointer;
+		transition:
+			200ms all cubic-bezier(0.18, 0.89, 0.32, 1.28),
+			200ms background-color cubic-bezier(0.22, 0.61, 0.36, 1),
+			0ms 200ms rotate linear;
+	}
+
+	#navbar-button:hover, 
+	#navbar-button:focus-visible {
+		background-color: var(--accent-dark-clr);
+		background-size: 0 100%;
+		border-left-width: 8px;
+	}
+
+	#navbar-button:focus-visible {
+		outline-color: var(--primary-lighter-clr);
+	}
+
+	#navbar-button:active {
+		background-color: var(--accent-darker-clr);
+		border-left-width: 8px;
+	}
+
+	#navbar-button[aria-expanded="false"] {
+		rotate: 180deg;
+	}
+
+	#nav-menu {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		min-height: 60%;
+		background-color: var(--primary-clr);
+	}
+
+	#nav-menu-button {
+		display: none;
+		padding: 0;
+		margin: 0 0 0 1rem;
+		height: 100%;
+		border: none;
+		background-color: transparent;
+		color: var(--bg-clr);
+		font-family: "poppins";
+		font-size: inherit;
+		cursor: pointer;
+	}
+
+	#nav-list {
+		visibility: hidden;
+		overflow-x: hidden;
+		list-style: none;
+		width: 0;
+		margin: 0;
+		padding: 0;
+		transition: 
+			500ms all cubic-bezier(0.18,0.89,0.32,1.28), 
+			200ms background-color cubic-bezier(0.22,0.61,0.36,1), 
+			400ms 100ms width cubic-bezier(1,0,0,1);
+	}
+
+	#navbar.expanded #nav-list {
+		visibility: visible;
+		width: 100%;
+	}
+
+	.nav-link {
+		--bg-bar-clr: var(--primary-lighter-clr);
+		display: block;
+		width: 100%;
+		padding: 1.2rem 1.2em;
+		color: var(--bg-clr);
+		text-decoration: none;
+		border-top: 2px var(--primary-light-clr) solid;
+		border-bottom: 2px var(--primary-light-clr) solid;
+		transition:
+			200ms all cubic-bezier(0.18, 0.89, 0.32, 1.28),
+			200ms background-color cubic-bezier(0.22, 0.61, 0.36, 1);
+		background: linear-gradient(
+			180deg,
+			var(--primary-lighter-clr) 33%,
+			var(--secondary-lighter-clr) 33%,
+			var(--secondary-lighter-clr) 66%,
+			var(--accent-lighter-clr) 66%
+		);
+		background-position: 0 100%;
+		background-repeat: no-repeat;
+		background-size: 0 100%;
+	}
+
+	.nav-link:hover,
+	.nav-link:focus-visible {
+		padding-left: 2em;
+		background-color: var(--primary-dark-clr);
+		background-position: 0 100%;
+		background-size: 1rem 100%;
+	}
+
+	.nav-link:active {
+		padding-left: 2rem;
+		background-color: var(--primary-darker-clr);
+		background-position: 0 0;
+	}
+
+	.nav-item ~ .nav-item > .nav-link {
+		border-top: none;
+	}
+
+	@media (max-width: 62.5em) or (max-height: 38.125em) {
+		#navbar {
+			width: 100%;
+			height: initial;
+			flex-direction: row;
+		}
+
+		#navbar > .secondary {
+			width: 30%;
+			height: 100%;
+		}
+
+		#navbar > .accent {
+			width: 10%;
+			height: 100%;
+		}
+
+		#navbar-button {
+			display: none;
+		}
+
+		#nav-menu {
+			width: 60%;
+			min-height: 100%;
+			display: initial;
+			background-color: var(--primary-clr);
+		}
+
+		#nav-menu-button {
+			display: initial;
+		}
+
+		#nav-list {
+			visibility: hidden;
+			overflow: hidden;
+			max-width: 0;
+			width: 100%;
+			max-height: calc(100vh - 100%);
+			background-color: inherit;
+			border-top: 2px var(--accent-light-clr) solid;
+			transition: 400ms all cubic-bezier(1,0,0,1);
+		}
+
+		#nav-list.expanded {
+			visibility: visible;
+			overflow: auto;
+			max-width: 100%;
+		}
+
+		.nav-link {
+			border-top: none;
+		}
+	}
+
+	.external-link {
+		position: relative;
+	}
+
+	.external-link::after {
+		content: "";
+		position: absolute;
+		left: calc(100% + 0.35em);
+		width: 100%;
+		height: 100%;
+		background-image: url("../Icons/arrow-up-right-from-square-solid.svg");
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		background-size: 1.15em;
+	}
+
+	.primary-button,
+	.secondary-button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: fit-content;
+		min-width: 10ch;
+		min-height: 44px;
+		padding: 1.25em 2em;
+		background-color: transparent;
+		border: none;
+		font-family: inherit;
+		font-weight: 500;
+		text-decoration: none;
+		text-align: center;
+		line-height: 1.3;
+		cursor: pointer;
+		transition:
+			200ms all cubic-bezier(0.18, 0.89, 0.32, 1.28),
+			200ms background-color cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	@media screen and (-ms-high-contrast: active) {
+		.primary-button,
+		.secondary-button {
+			border: 2px solid currentcolor;
+		}
+	}
+
+	.primary-button {
+		color: var(--bg-light-clr);
+		background-color: var(--primary-clr);
+		box-shadow: 4px 4px var(--accent-light-clr);
+		background-image: linear-gradient(
+			90deg,
+			var(--primary-lighter-clr) 33%,
+			var(--secondary-lighter-clr) 33%,
+			var(--secondary-lighter-clr) 66%,
+			var(--accent-lighter-clr) 66%
+		);
+		background-position: 0 100%;
+		background-repeat: no-repeat;
+		background-size: 100% 0;
+	}
+
+	.primary-button:hover,
+	.primary-button:focus-visible,
+	.primary-button:active {
+		padding-left: 2.5em;
+		padding-right: 2.5em;
+		background-color: var(--primary-dark-clr);
+		background-position: 0 100%;
+		background-size: 100% 0.5rem;
+	}
+
+	.primary-button:active {
+		background-color: var(--primary-darker-clr);
+	}
+
+	.secondary-button {
+		color: var(--text-clr);
+		background-color: var(--secondary-light-clr);
+		box-shadow: 4px 4px var(--primary-lighter-clr);
+	}
+
+	.secondary-button:hover,
+	.secondary-button:active {
+		background-color: var(--secondary-dark-clr);
+		box-shadow: 8px 8px var(--primary-lighter-clr);
+	}
+
+	.secondary-button:active {
+		background-color: var(--secondary-darker-clr);
+	}
+
+	.progress-bar {
+		position: relative;
+		display: block;
+		height: 0.5rem;
+		background-color: var(--primary-lighter-clr);
+		border-radius: 16px;
+		box-shadow: 4px 4px 0 0 var(--text-lighter-clr);
+	}
+
+	.progress-bar::before {
+		content: "";
+		position: absolute;
+		width: var(--val, 0px);
+		height: 100%;
+		background-color: var(--accent-clr);
+		border-radius: inherit;
+	}
+
+	.text-list {
+		padding-left: 1.5rem;
+	}
+
+	.text-list > .list-item {
+		max-width: 55ch;
+		margin-bottom: 0.5em;
+	}
+
+	.skills-list {
+		margin-top: 1.5em;
+		padding-left: 0;
+		width: 19.5rem;
+		font-weight: 500;
+		list-style: none;
+	}
+
+	.skills-list > .list-item {
+		margin-bottom: 3.5em;
+	}
+
+	.contacts-list {
+		padding-left: 0;
+		list-style: none;
+	}
+
+	.contacts-list > .list-item {
+		margin-bottom: 0.5em;
+		font-weight: 500;
+	}
+
+	.text-art {
+		margin: 1em 0 0 1em;
+		font-size: 0.6em;
+		font-weight: 900;
+		line-height: 1.3;
+	}
+
+	main {
+		grid-area: content;
+	}
+
+	section:not(.subsection) {
+		padding: 5rem 8vw;
+	}
+
+	* + section:not(.subsection),
+	* + footer {
+		border-top: var(--section-border);
+	}
+
+	#intro {
+		min-height: 100vh;
+		margin: 0 0 calc(5rem - 5vh) 0;
+		padding: 0 12vw;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	#intro > p {
+		max-width: 65ch;
+	}
+
+	#intro > .primary-button {
+		margin: 2.75em 0;
+	}
+
+	#title > .primary-underline, #title > .secondary-underline {
+		text-decoration: inherit;
+	}
+
+	#title > .primary-underline {
+		text-decoration-color: var(--primary-lighter-clr);
+	}
+
+	#title > .secondary-underline {
+		text-decoration-color: var(--secondary-clr);
+	}
+
+	#title > .sparkles {
+		position: absolute;
+		top: -3.4rem;
+		left: 3.4em;
+		width: 1.35em;
+	}
+
+	#about {
+		overflow: hidden;
+		display: grid;
+		grid-template-columns: minmax(50ch, 1.75fr) auto;
+		grid-template-rows: repeat(auto-fit, 100%);
+		padding: 0;
+	}
+
+	#self-description {
+		position: relative;
+		grid-column: 1 / 3;
+		padding: 5rem 4vw 5rem 6vw;
+		border-bottom: var(--subsection-border);
+	}
+
+	#hobbies {
+		position: relative;
+		padding: 5rem 4vw 5rem 6vw;
+	}
+
+	#hobbies::before,
+	#hobbies::after {
+		content: "";
+		position: absolute;
+		border-radius: 2rem;
+		width: 8px;
+		height: 8px;
+		background-color: var(--text-lighter-clr);
+		top: -4px;
+	}
+
+	#hobbies::before {
+		left: -4px;
+	}
+
+	#hobbies::after {
+		right: -4px;
+	}
+
+	#likes-dislikes {
+		position: relative;
+		grid-column: 1 / 3;
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 10vw;
+		row-gap: 4.5rem;
+		padding: 5rem 6vw;
+		border-top: var(--subsection-border);
+	}
+
+	#likes-dislikes::before,
+	#likes-dislikes::after {
+		content: "";
+		position: absolute;
+		border-radius: 2rem;
+		width: 8px;
+		height: 8px;
+		background-color: var(--text-lighter-clr);
+		top: -4px;
+	}
+
+	#likes-dislikes::before {
+		left: -4px;
+	}
+
+	#likes-dislikes::after {
+		right: -4px;
+	}
+
+	#skills {
+		position: relative;
+		grid-column: 2 / 3;
+		grid-row: 1 / 3;
+		padding: 5rem 6vw 5rem 4vw;
+		border-left: var(--subsection-border);
+	}
+
+	#skills::before,
+	#skills::after {
+		content: "";
+		position: absolute;
+		border-radius: 2rem;
+		width: 8px;
+		height: 8px;
+		background-color: var(--text-lighter-clr);
+		left: -4px;
+	}
+
+	#skills::before {
+		top: -4px;
+	}
+
+	#skills::after {
+		bottom: -4px;
+	}
+
+	.img-gallery {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		row-gap: 2rem;
+		column-gap: 2.5rem;
+		padding: 2.5rem 1rem;
+		border-top: var(--subsection-border);
+		border-bottom: var(--subsection-border);
+	}
+
+	.img-gallery > .gallery-item {
+		width: 100%;
+		max-width: 774px;
+		height: auto;
+		align-self: center;
+		box-shadow: 0.5rem 0.5rem 0 var(--secondary-clr);
+	}
+
+	footer {
+		overflow: hidden;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		row-gap: 4.5rem;
+		column-gap: 10vw;
+		padding: 5rem 6vw;
+		border-top: var(--section-border);
+	}
+
+	@media ((max-width: 85em) and (min-height: 38.125em)) or ((max-width: 70em) and (max-height: 38.125em)) {
+		#about {
+			display: block;
+		}
+
+		#about > .subsection {
+			padding-left: 8vw;
+			padding-right: 8vw;
+		}
+
+		#skills {
+			border-left: none;
+			border-top: var(--subsection-border);
+		}
+
+		#skills::after {
+			top: -4px;
+			left: initial;
+			bottom: initial;
+			right: -4px;
+		}
+	}
+
+	@media ((min-width: 85em) and (min-height: 38.125em)) or ((min-width: 70em) and (max-height: 38.125em)) {
+		#about > .subsection {
+			padding-left: 8vw;
+			padding-right: 8vw;
+		}
+
+		#hobbies {
+			grid-column: 1 / 2;
+		}
+
+		#skills {
+			grid-column: 2 / 3;
+			grid-row: 2 / 3;
+		}
+
+		#skills::before {
+			right: -4px;
+			left: initial;
+		}
+	}
+
+	@media ((min-width: 108em) and (min-height: 38.125em)) or ((min-width: 93em) and (max-height: 38.125em)) {
+		#self-description {
+			grid-column: 1 / 2;
+		}
+
+		#skills {
+			grid-row: 1 / 3;
+		}
+
+		#skills::before {
+			right: initial;
+			left: -4px;
+		}
+	}
+
+	@media (min-width: 150em) {
+		#about {
+			grid-template-columns: 3fr 1.5fr 1fr;
+		}
+
+		#self-description {
+			grid-column: 1 / 2;
+			padding: 5rem 4vw 5rem 6vw !important;
+			border-bottom: none;
+		}
+
+		#hobbies {
+			grid-column: 2 / 3;
+			padding: 5rem 4vw !important;
+			border-left: var(--subsection-border);
+		}
+
+		#hobbies::before {
+			left: -4px;
+		}
+
+		#hobbies::after {
+			top: initial;
+			left: -4px;
+			bottom: -4px;
+			right: initial;
+		}
+
+		#likes-dislikes {
+			padding: 5rem 6vw;
+		}
+
+		#skills {
+			grid-column: 3 / 4;
+			grid-row: 1 / 4;
+			padding: 5rem 6vw 5rem 4vw !important;
+			border-left: var(--subsection-border);
+		}
+	}
+</style>
