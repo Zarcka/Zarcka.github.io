@@ -1,6 +1,6 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
 import artwork1 from "../Images/artwork1.jpg";
 import artwork2 from "../Images/artwork2.jpg";
 import artwork3 from "../Images/artwork3.jpg";
@@ -10,6 +10,18 @@ import artwork4 from "../Images/artwork4.jpg";
 <script>
 	const navMenuButton: Element = document.querySelector("#nav-menu-button");
 	const navbarButton: Element = document.querySelector("#navbar-button");
+	const galleryImages: NodeListOf<HTMLImageElement> = document.querySelectorAll(".image-gallery .gallery-item");
+	const expandButtons: NodeListOf<HTMLElement> = document.querySelectorAll(".image-gallery .gallery-item ~ .expand-button");
+	const lightboxElem: HTMLDialogElement = document.querySelector("#image-gallery-lightbox");
+	const lightboxImage: HTMLImageElement = document.querySelector("#lightbox-image");
+	const lightboxCloseButton = document.querySelector("#image-gallery-lightbox .close-button");
+	const lightboxPreviousButton = document.querySelector("#image-gallery-lightbox .previous-button");
+	const lightboxNextButton = document.querySelector("#image-gallery-lightbox .next-button");
+	let currentImageIndex: number = 0;
+
+	for (let i = 0; i < galleryImages.length; i++) {
+		expandButtons[i].dataset.index = String(i);
+	}
 
 	function toggleAriaExpandedElem (elem: Element) {
 		let ariaExpanded = elem.getAttribute("aria-expanded");
@@ -55,7 +67,62 @@ import artwork4 from "../Images/artwork4.jpg";
 			hiddenText.textContent = hiddenText.getAttribute("data-maximised-text");
 		}
 	}, false);
+
+	for (let i = 0; i < expandButtons.length; i++) {
+		expandButtons[i].addEventListener("click", () => {
+			currentImageIndex = Number(expandButtons[i].dataset.index);
+			lightboxImage.width = galleryImages[Number(expandButtons[i].dataset.index)].width;
+			lightboxImage.height = galleryImages[Number(expandButtons[i].dataset.index)].height;
+			lightboxImage.alt = galleryImages[Number(expandButtons[i].dataset.index)].alt;
+			lightboxImage.src = galleryImages[Number(expandButtons[i].dataset.index)].src;
+			
+			lightboxElem.showModal();
+		}, false);
+	}
+
+	lightboxCloseButton.addEventListener("click", () => { lightboxElem.close() }, false);
+
+	lightboxPreviousButton.addEventListener("click", () => {
+		currentImageIndex = (currentImageIndex - 1 < 0) ? (galleryImages.length - 1) : (currentImageIndex - 1);
+
+		lightboxImage.width = galleryImages[currentImageIndex].width;
+		lightboxImage.height = galleryImages[currentImageIndex].height;
+		lightboxImage.alt = galleryImages[currentImageIndex].alt;
+		lightboxImage.src = galleryImages[currentImageIndex].src;
+	}, false);
+
+	lightboxNextButton.addEventListener("click", () => {
+		currentImageIndex = (currentImageIndex + 1 >= galleryImages.length) ? 0 : (currentImageIndex + 1);
+
+		lightboxImage.width = galleryImages[currentImageIndex].width;
+		lightboxImage.height = galleryImages[currentImageIndex].height;
+		lightboxImage.alt = galleryImages[currentImageIndex].alt;
+		lightboxImage.src = galleryImages[currentImageIndex].src;
+	}, false);
 </script>
+
+<!-- 
+	// !    - Lightbox:
+	// *    - Add an expand button element under each image, (Completed)
+	// TODO - Use a dialog element to act as the lightbox,
+	// TODO - Add a close button under expanded image and apply the autofocus attribute on it,
+	// TODO - Add a previous button and next button on the both sides
+	// ?    - For the expand button and close button, use the secondary button styling
+	// ?    - Or for the expand button and close button use the same styling as the #navbar-button (Instructions on next line)
+	// ?    - Instructions: 
+	// ?    -   1. Change border-left-width to border-width
+	// ?    -   (?) 2. Create a tertiary-button--<primary | secondary | accent> class instead of using id
+	// ?    -   (?) 2. Re-use the secondary-button class instead of creating a new tertiary-button class
+	// ?    -   3. Create a button-border--<top | right | bottom | left> class to specify where the border is
+
+	TODO - Other Stuff:
+	*    - Modify description of website using meta tag
+	TODO - Modify image preview (if cannot be set using meta tag, check the github settings)
+	// TODO - Add meta tags to improve SEO
+	*    - Add more details in the About me section
+	*    - Rewrite the Thank you for reading section
+	*    - Add a bonus section at the end (and maybe include an ASCII cat there :D)
+-->
 
 <Layout title="Zarcka's Portfolio">
 	<a href="#main" id="main-skip-link">Skip to main content</a>
@@ -77,7 +144,7 @@ import artwork4 from "../Images/artwork4.jpg";
 					<a href="#projects" class="nav-link">Projects</a>
 				</li>
 				<li class="nav-item">
-					<a href="#footer" class="nav-link">Contacts</a>
+					<a href="#contacts" class="nav-link">Contacts</a>
 				</li>
 			</ul>
 		</nav>
@@ -166,16 +233,26 @@ import artwork4 from "../Images/artwork4.jpg";
 				<p>
 					Hi, my name's Zarcka! What do you think of it?
 					<br>
-					I am someone who's a bit creative, a little silly and have a love for anything of cute such as cats :3, dogs and plushies ^-^. Moreover, I am a front-end developer with a bit of experience in web design but I am also learning Haskell and Computer Science; an occasional artist with a specialty in abstract drawings using average writing pencils or pens; and lastly, I like to play osu, a rythm-game and click on circles or master the 4 keys of osu!mania; I joined osu in Januray 2023 and been playing casually but now, I play more often and with a greater focus on improving.
+					I am someone who's a bit creative, a little silly and have a love for anything of cute such as cats :3, dogs and plushies ^-^. Also, I am passionate about Mathematics and have an interest for abstract concepts with real world applications. And to top it off, I am also a self-taught programmer, an occasional artist and a decent osu! player and I will be expanding on those three in the upcoming paragraphs.
+				</p>
+				<p>
+					Starting with me as a programmer, I had an interest in computers and electronics since a young age and from there, I learnt from online resources on my own. However, it has been no smooth sailing, I watched several tutorials, tried multiple programming languages and gave up many times. Despite the hardships, I kept on and this is where I am, a front-end developer with a bit of experience in web design and moving forward, I would like to learn more about the inner workings of computers and computer science in general.
+				</p>
+				<p>
+					Me as an occasional artist, I have been drawing for a few years and my specialty is abstract art. I drew from time to time and at first, those were random doodles. As time went, I stopped drawing. One afternoon, I met a dear friend who's amazing at art and seeing one of their artworks made me very jealous so I picked up my pencil and was back to drawing. 1 or 2 years later, I made great strides in improving my art skills and I am quite proud of it. On top of that, I am no more as jealous of my friend's art or of others' art as before and I will keep drawing from time to time, making things I can be proud of.
+				</p>
+				<p>
+					Lastly, me as an osu player. I first joined osu in January of 2023 and in the beginning, I couldn't figure out how to play so I stopped playing. Fast-forward to 2 months later and i was back to osu! for some reason. However, this time, I could figure out how to play and from there I kept on improving slowly but surely. And over time, I started to play osu!mania 4K. I have fun playing it and I have had great improvements as of the time of writing. Even though I do not play as much as before, I still keep on improving and having fun in both osu!standard and osu!mania.
 				</p>
 			</section>
 			<section id="hobbies" class="subsection">
 				<h3>Hobbies</h3>
 				<ul class="text-list">
 					<li class="list-item">Programming</li>
-					<li class="list-item">Drawing</li>
+					<li class="list-item line-through"><i>Drawing</i></li>
 					<li class="list-item">Playing osu!</li>
-					<li class="list-item">Playing sudoku</li>
+					<li class="list-item line-through"><i>Playing sudoku</i></li>
+					<li class="list-item line-through"><i>Reading</i></li>
 				</ul>
 			</section>
 			<section id="likes-dislikes" class="subsection">
@@ -183,18 +260,21 @@ import artwork4 from "../Images/artwork4.jpg";
 					<h3>&plus; Likes</h3>
 					<ul class="text-list">
 						<li class="list-item">Cute plushies</li>
-						<li class="list-item">
-							Cats and dogs
+						<li class="list-item">Cats and dogs
 <pre class="text-art" aria-hidden="true">
         へ   ♡   ╱|、
     ૮ -  ՛)     (` - 7
     / ⁻  ៸|      |、⁻〵
-乀 (ˍ, ل ل       じしˍ,)ノ
+乀 (ˍ, ل  ل      じしˍ,)ノ
 </pre>
 						</li>
 						<li class="list-item">Other cute animals</li>
 						<li class="list-item">Chocolate</li>
 						<li class="list-item">Text art or ASCII art</li>
+						<li class="list-item">Looking at plants</li>
+						<li class="list-item">Mahiro Oyama from Onii-chan wa Oshimai!</li>
+						<li class="list-item">Camellia and t+pazolite (both are amazing)</li>
+						<li class="list-item">Made In Abyss (I love this anime but I will not watch it again for a long time)</li>
 					</ul>
 				</section>
 				<section id="dislikes" class="subsection">
@@ -204,23 +284,28 @@ import artwork4 from "../Images/artwork4.jpg";
 						<li class="list-item">Feeling depressed</li>
 						<li class="list-item">Being tired but can't fall asleep</li>
 						<li class="list-item">Realistic blood, gore, etc <i>(I am a bit senstive to those kind of things)</i></li>
+						<li class="list-item"><b>The feeling of envying something that I can never have.</b></li>
 					</ul>
 				</section>
 			</section>
-			<section id="skills" class="subsection">
-				<h3>Skills</h3>
-				<ul class="skills-list">
+			<section id="stats" class="subsection">
+				<h3>Statistics</h3>
+				<ul class="stats-list">
 					<li class="list-item">
-						HTML
-						<span class="progress-bar" style="--val: 90%"></span>
+						Mathematics
+						<span class="progress-bar" style="--val: 55%"></span>
 					</li>
 					<li class="list-item">
-						CSS
-						<span class="progress-bar" style="--val: 80%"></span>
+						Social skills
+						<span class="progress-bar" style="--val: 25%"></span>
 					</li>
 					<li class="list-item">
-						JS
-						<span class="progress-bar" style="--val: 30%"></span>
+						Sleep schedule
+						<span class="progress-bar" style="--val: 20%"></span>
+					</li>
+					<li class="list-item">
+						Time management
+						<span class="progress-bar" style="--val: 15%"></span>
 					</li>
 				</ul>
 			</section>
@@ -228,44 +313,99 @@ import artwork4 from "../Images/artwork4.jpg";
 		<section id="projects">
 			<section id="drawings" class="subsection">
 				<h2>Drawings</h2>
-				<div class="img-gallery">
-					<Image 
-						src={artwork1} 
-						alt="A pencil drawing of tentacles with eyes coming out of the center using small dots and lines" 
-						class="gallery-item" 
-					/>
-					<Image 
-						src={artwork2} 
-						alt="An abstract drawing using pencil" 
-						class="gallery-item" 
-					/>
-					<Image 
-						src={artwork3} 
-						alt="An incomplete abstract drawing using pencil" 
-						class="gallery-item" 
-					/>
-					<Image 
-						src={artwork4} 
-						alt="An incomplete drawing consisting of small dots of different colours using pens" 
-						class="gallery-item" 
-					/>
+				<div class="image-gallery">
+					<div class="gallery-item-container">
+						<Image
+							src={artwork1}
+							alt="A pencil drawing of tentacles with eyes coming out of the center using small dots and lines"
+							class="gallery-item"
+						/>
+						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
+					</div>
+					<div class="gallery-item-container">
+						<Image
+							src={artwork2}
+							alt="An abstract drawing using pencil"
+							class="gallery-item"
+						/>
+						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
+					</div>
+					<div class="gallery-item-container">
+						<Image
+							src={artwork3}
+							alt="An incomplete abstract drawing using pencil"
+							class="gallery-item"
+						/>
+						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
+					</div>
+					<div class="gallery-item-container">
+						<Image
+							src={artwork4}
+							alt="An incomplete drawing consisting of small dots of different colours using pens"
+							class="gallery-item"
+						/>
+						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
+					</div>
+					<dialog id="image-gallery-lightbox">
+						<img src="" alt="" id="lightbox-image" />
+						<button type="button" class="secondary-button close-button" autofocus>
+							<span class="visually-hidden">Close image lightbox</span>
+							<span aria-hidden="true">&minus;</span>
+						</button>
+						<button type="button" class="secondary-button previous-button">
+							<span class="visually-hidden">Previous image</span>
+							<span aria-hidden="true">&#10094;</span>
+						</button>
+						<button type="button" class="secondary-button next-button">
+							<span class="visually-hidden">Next image</span>
+							<span aria-hidden="true">&#10095;</span>
+						</button>
+					</dialog>
 				</div>
 			</section>
 		</section>
 		<footer id="footer">
 			<section id="footer-note" class="subsection">
-				<h3>Thank you for reading!</h3>
+				<h2>Thank you for reading!</h2>
 				<p>
-					This website took around 2 months to be completed, It was a lot work from start to finish and I would like to thank a more experienced friend for his critic on the design, he is a cool guy. Now that it is done, I am satisified and can finally work on other projects I had in mind for a while.
+					The designing of this website had started in the October of 2023 and well.. The website did not turn out exactly like I had designed it but still the design had been very much helpful and I would like to thank a more experienced friend of mine for his feedback on the design. 
+				</p>
+				<p>
+					The development of the website had started in November of 2023 and the first version of it was released on the 31th of December 2023 at around 1 am. Pushing it to the Github repository was harder than I thought and I had quickly realised I had forgotten to change the website title so I rapidly fixed that. However there were still other things I wanted to add and change as I had rushed it to put it online before 2024.
+				</p>
+				<p>
+					Even though the website was technically done, it was not perfect enough so I made a list of things to work on and improve. Fast forward to <span class="line-through"><i>February</i></span> March of 2024 (this project took way longer), the About Me section has been rewritten; the Skills section has been renamed to the Statistics section and more was added to it; and the other sections have been changed too. Still, I am not satisfied with what I wrote in the about me section as it doesn't quite capture who I am and other things such as my interest for Mathematics and how I can be from time to time. I could keep working on it for another month but I have my academic studies and other projects I want to devote my attention and energy to.
+				</p>
+				<p>
+					So yep, this is the conclusion. I hope that you got to know me better or liked my website at least. And as always I hope that you, dear reader, have an amazing day, night or time and I bid farewell to you.
 				</p>
 			</section>
 			<section id="contacts" class="subsection">
 				<h3>Contacts</h3>
 				<ul class="contacts-list">
-					<li class="list-item">Discord: <b>Zarcka#4167</b></li>
 					<li class="list-item">Osu: <a href="https://osu.ppy.sh/users/32690558" class="external-link"><b>Zarcka</b></a></li>
 					<li class="list-item">Github: <a href="https://github.com/Zarcka/" class="external-link"><b>Zarcka</b></a></li>
+					<li class="list-item">Discord: <b>zarcka</b> </li>
+					<p>(Note: I am very unlikely to respond to friend requests and if you do send a message, please inform me that you came from this website!)</p>
 				</ul>
+			</section>
+			<section id="bonus" class="subsection">
+<pre class="text-art" aria-hidden="true">
+                    ＿＿
+                ✿＞　　 フ
+                | 　_　 _|
+               ／` ミ＿xノ
+              /　　　 　 |
+             /　 ヽ　　 ﾉ
+             │　　|　|　|
+         ／￣|　　 |　|　|
+         | (￣ヽ＿_ヽ_)__)
+         ＼二つ
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ Finally, I finished this website..
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+</pre>
 			</section>
 		</footer>
 	</main>
@@ -353,13 +493,12 @@ import artwork4 from "../Images/artwork4.jpg";
 		position: relative;
 		margin: calc(3.75em - 27.5vh) 0 0.45em 0;
 		font-size: calc(2rem + 1.6vh + 1.6vw);
-		text-decoration-color: var(--accent-lighter-clr);
 		letter-spacing: 0;
 		line-height: 1.3;
 	}
 
 	h2 {
-		margin-bottom: 1rem;
+		margin-bottom: 1.75rem;
 		font-size: calc(1.75rem + 0.6vh + 0.6vw);
 		text-decoration-color: var(--accent-light-clr);
 	}
@@ -375,11 +514,24 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	p {
 		max-width: 80ch;
-		margin: 0;
+		margin: 1rem 0 2rem;
 	}
 
 	a:focus-visible, button:focus-visible {
 		outline: 4px var(--accent-light-clr) solid;
+	}
+
+	main {
+		grid-area: content;
+	}
+
+	section:not(.subsection) {
+		padding: 5rem 8vw;
+	}
+
+	* + section:not(.subsection),
+	* + footer {
+		border-top: var(--section-border);
 	}
 
 	/*
@@ -453,7 +605,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		background-color: var(--accent-clr);
 		background-size: 100% 100%;
 		border: none;
-		border-left: 4px var(--accent-light-clr) solid;
+		border-left: 8px var(--accent-light-clr) solid;
 		cursor: pointer;
 		transition:
 			200ms all cubic-bezier(0.18, 0.89, 0.32, 1.28),
@@ -465,7 +617,7 @@ import artwork4 from "../Images/artwork4.jpg";
 	#navbar-button:focus-visible {
 		background-color: var(--accent-dark-clr);
 		background-size: 0 100%;
-		border-left-width: 8px;
+		border-left-width: 12px;
 	}
 
 	#navbar-button:focus-visible {
@@ -496,7 +648,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		height: 100%;
 		border: none;
 		background-color: transparent;
-		color: var(--bg-clr);
+		color: var(--bg-light-clr);
 		font-family: "poppins";
 		font-size: inherit;
 		cursor: pointer;
@@ -525,7 +677,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		display: block;
 		width: 100%;
 		padding: 1.2rem 1.2em;
-		color: var(--bg-clr);
+		color: var(--bg-light-clr);
 		text-decoration: none;
 		border-top: 2px var(--primary-light-clr) solid;
 		border-bottom: 2px var(--primary-light-clr) solid;
@@ -616,6 +768,10 @@ import artwork4 from "../Images/artwork4.jpg";
 		}
 	}
 
+	.line-through {
+		text-decoration-line: line-through;
+	}
+
 	.external-link {
 		position: relative;
 	}
@@ -644,6 +800,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		background-color: transparent;
 		border: none;
 		font-family: inherit;
+		font-size: inherit;
 		font-weight: 500;
 		text-decoration: none;
 		text-align: center;
@@ -699,12 +856,13 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	.secondary-button:hover,
 	.secondary-button:active {
-		background-color: var(--secondary-dark-clr);
-		box-shadow: 8px 8px var(--primary-lighter-clr);
+		padding-right: 2.5em;
+		padding-left: 2.5em;
+		background-color: var(--secondary-clr);
 	}
 
 	.secondary-button:active {
-		background-color: var(--secondary-darker-clr);
+		background-color: var(--secondary-dark-clr);
 	}
 
 	.progress-bar {
@@ -730,19 +888,20 @@ import artwork4 from "../Images/artwork4.jpg";
 	}
 
 	.text-list > .list-item {
-		max-width: 55ch;
+		max-width: 65ch;
 		margin-bottom: 0.5em;
 	}
 
-	.skills-list {
+	.stats-list {
 		margin-top: 1.5em;
 		padding-left: 0;
-		width: 19.5rem;
+		width: calc(100vw - (var(--side-padding, 0vw) * 2));
+		max-width: 19.5rem;
 		font-weight: 500;
 		list-style: none;
 	}
 
-	.skills-list > .list-item {
+	.stats-list > .list-item {
 		margin-bottom: 3.5em;
 	}
 
@@ -763,17 +922,96 @@ import artwork4 from "../Images/artwork4.jpg";
 		line-height: 1.3;
 	}
 
-	main {
-		grid-area: content;
+	.expand-button {
+		display: block;
+		margin-left: auto;
 	}
 
-	section:not(.subsection) {
-		padding: 5rem 8vw;
+	@media (max-width: 40em) {
+		.expand-button {
+			display: none;
+		}
 	}
 
-	* + section:not(.subsection),
-	* + footer {
-		border-top: var(--section-border);
+	.image-gallery {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 3rem 2.5rem;
+		padding: 2.5rem 1rem;
+		border-top: var(--subsection-border);
+		border-bottom: var(--subsection-border);
+	}
+
+	.image-gallery .gallery-item {
+		display: block;
+		width: 100%;
+		max-width: 774px;
+		height: auto;
+		box-shadow: 4px 4px 0 var(--secondary-clr);
+	}
+
+	#image-gallery-lightbox {
+		width: 100vw;
+		height: 100vh;
+		padding: 0;
+		background: none;
+		border: none;
+		grid-template-rows: max-content 1fr;
+		justify-items: center;
+		justify-content: center;
+		row-gap: 1rem;
+		column-gap: 1rem;
+	}
+
+	#image-gallery-lightbox[open] {
+		display: grid;
+	}
+
+	#image-gallery-lightbox::backdrop {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+
+	#lightbox-image {
+		object-fit: contain;
+		width: 100%;
+		height: 100%;
+		grid-row: 1 / 3;
+		grid-column: 2 / 3;
+	}
+
+	#image-gallery-lightbox > button {
+		min-width: initial;
+		width: fit-content;
+		padding: 1.25em clamp(0.5em, 3vw, 2em);
+		color: var(--bg-lighter-clr);
+		background-color: rgba(252, 247, 242, 0.1);
+		box-shadow: none;
+		border-top: 2px var(--bg-lighter-clr) solid;
+		border-bottom: 2px var(--bg-lighter-clr) solid;
+	}
+
+	#image-gallery-lightbox > button:hover {
+		background-color: rgba(252, 247, 242, 0.2);
+	}
+
+	#image-gallery-lightbox > button:active {
+		background-color: rgba(252, 247, 242, 0.25);
+	}
+
+	#image-gallery-lightbox > .close-button {
+		grid-column: 3 / 4;
+		grid-row: 1 / 2;
+	}
+
+	#image-gallery-lightbox > .previous-button {
+		grid-row: 1 / 3;
+		grid-column: 1 / 2;
+	}
+
+	#image-gallery-lightbox > .next-button {
+		grid-column: 3 / 4;
+		grid-row: 2 / 3;
 	}
 
 	#intro {
@@ -787,6 +1025,7 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	#intro > p {
 		max-width: 65ch;
+		margin: 0;
 	}
 
 	#intro > .primary-button {
@@ -881,7 +1120,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		right: -4px;
 	}
 
-	#skills {
+	#stats {
 		position: relative;
 		grid-column: 2 / 3;
 		grid-row: 1 / 3;
@@ -889,8 +1128,8 @@ import artwork4 from "../Images/artwork4.jpg";
 		border-left: var(--subsection-border);
 	}
 
-	#skills::before,
-	#skills::after {
+	#stats::before,
+	#stats::after {
 		content: "";
 		position: absolute;
 		border-radius: 2rem;
@@ -900,42 +1139,12 @@ import artwork4 from "../Images/artwork4.jpg";
 		left: -4px;
 	}
 
-	#skills::before {
+	#stats::before {
 		top: -4px;
 	}
 
-	#skills::after {
+	#stats::after {
 		bottom: -4px;
-	}
-
-	.img-gallery {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		row-gap: 2rem;
-		column-gap: 2.5rem;
-		padding: 2.5rem 1rem;
-		border-top: var(--subsection-border);
-		border-bottom: var(--subsection-border);
-	}
-
-	.img-gallery > .gallery-item {
-		width: 100%;
-		max-width: 774px;
-		height: auto;
-		align-self: center;
-		box-shadow: 0.5rem 0.5rem 0 var(--secondary-clr);
-	}
-
-	footer {
-		overflow: hidden;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		row-gap: 4.5rem;
-		column-gap: 10vw;
-		padding: 5rem 6vw;
-		border-top: var(--section-border);
 	}
 
 	@media ((max-width: 85em) and (min-height: 38.125em)) or ((max-width: 70em) and (max-height: 38.125em)) {
@@ -944,16 +1153,17 @@ import artwork4 from "../Images/artwork4.jpg";
 		}
 
 		#about > .subsection {
-			padding-left: 8vw;
-			padding-right: 8vw;
+			--side-padding: 8vw;
+			padding-left: var(--side-padding);
+			padding-right: var(--side-padding);
 		}
 
-		#skills {
+		#stats {
 			border-left: none;
 			border-top: var(--subsection-border);
 		}
 
-		#skills::after {
+		#stats::after {
 			top: -4px;
 			left: initial;
 			bottom: initial;
@@ -963,20 +1173,21 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	@media ((min-width: 85em) and (min-height: 38.125em)) or ((min-width: 70em) and (max-height: 38.125em)) {
 		#about > .subsection {
-			padding-left: 8vw;
-			padding-right: 8vw;
+			--side-padding: 8vw;
+			padding-left: var(--side-padding);
+			padding-right: var(--side-padding);
 		}
 
 		#hobbies {
 			grid-column: 1 / 2;
 		}
 
-		#skills {
+		#stats {
 			grid-column: 2 / 3;
 			grid-row: 2 / 3;
 		}
 
-		#skills::before {
+		#stats::before {
 			right: -4px;
 			left: initial;
 		}
@@ -987,11 +1198,11 @@ import artwork4 from "../Images/artwork4.jpg";
 			grid-column: 1 / 2;
 		}
 
-		#skills {
+		#stats {
 			grid-row: 1 / 3;
 		}
 
-		#skills::before {
+		#stats::before {
 			right: initial;
 			left: -4px;
 		}
@@ -1029,11 +1240,32 @@ import artwork4 from "../Images/artwork4.jpg";
 			padding: 5rem 6vw;
 		}
 
-		#skills {
+		#stats {
 			grid-column: 3 / 4;
 			grid-row: 1 / 4;
 			padding: 5rem 6vw 5rem 4vw !important;
 			border-left: var(--subsection-border);
 		}
 	}
+
+	footer {
+		overflow: hidden;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		row-gap: 4.5rem;
+		column-gap: 10vw;
+		padding: 5rem 6vw;
+		border-top: var(--section-border);
+	}
+
+	#bonus {
+		width: 100%;
+		margin-top: 3rem;
+	}
+
+	#bonus > .text-art {
+		width: fit-content;
+		margin: 0 auto;
+}
 </style>
