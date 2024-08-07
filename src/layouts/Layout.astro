@@ -33,7 +33,7 @@ const description = "Zarcka's corner of the internet where you can learn a thing
 		<meta name="twitter:card" content="summary_large_image"/>
 		<meta name="twitter:title" content={title}/>
 		<meta name="twitter:description" content={description}/>
-		<meta name="twitter:image" content="/Images/Banner.png"/>
+		<meta name="twitter:image" content="/Banner.png"/>
 
 		<link rel="canonical" href="https://zarcka.github.io"/>
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
@@ -43,7 +43,7 @@ const description = "Zarcka's corner of the internet where you can learn a thing
 		<link rel="manifest" href="/site.webmanifest"/>
 		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"/>
 		<meta name="msapplication-TileColor" content="#2b5797"/>
-		<meta name="theme-color" content="#fbe9e4"/>
+		<meta name="theme-color" content="#f4b8a9"/>
 
 		<title>{title}</title>
 	</head>
@@ -69,7 +69,7 @@ const description = "Zarcka's corner of the internet where you can learn a thing
 	body {
 		--expanded-navbar-width: 12rem;
 		--contracted-navbar-width: 3rem;
-		--navbar-width: var(--expanded-navbar-width);
+		--navbar-width: var(--contracted-navbar-width);
 		margin: 0;
 		padding: 0;
 		display: grid;
@@ -100,7 +100,7 @@ const description = "Zarcka's corner of the internet where you can learn a thing
 			Courier New,
 			monospace;
 	}
-	@media (max-width: 63.5rem) or (max-height: 38.125rem) {
+	@media (max-width: 67em) or (max-height: 38.125em) {
 		body {
 			grid-template-areas: 
 				"navbar  navbar " 

@@ -1,10 +1,15 @@
 ---
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 import Layout from "../layouts/Layout.astro";
-import artwork1 from "../Images/artwork1.jpg";
-import artwork2 from "../Images/artwork2.jpg";
-import artwork3 from "../Images/artwork3.jpg";
-import artwork4 from "../Images/artwork4.jpg";
+
+import artwork1 from "../Images/artworks/Inaccurate Biblical Angel.jpg";
+import artwork2 from "../Images/artworks/Nightmarish Algae.jpg";
+import artwork3 from "../Images/artworks/Incomplete Drawing.jpg";
+import artwork4 from "../Images/artworks/Multi-coloured Mold.jpg";
+
+const images = await Astro.glob<{ default: ImageMetadata }>("../Images/*.gif");
 ---
 
 <script>
@@ -14,14 +19,15 @@ import artwork4 from "../Images/artwork4.jpg";
 	const expandButtons: NodeListOf<HTMLElement> = document.querySelectorAll(".image-gallery .gallery-item ~ .expand-button");
 	const lightboxElem: HTMLDialogElement = document.querySelector("#image-gallery-lightbox");
 	const lightboxImage: HTMLImageElement = document.querySelector("#lightbox-image");
-	const lightboxCloseButton = document.querySelector("#image-gallery-lightbox .close-button");
-	const lightboxPreviousButton = document.querySelector("#image-gallery-lightbox .previous-button");
-	const lightboxNextButton = document.querySelector("#image-gallery-lightbox .next-button");
+	const lightboxCloseButton: Element = document.querySelector("#image-gallery-lightbox .close-button");
+	const lightboxPreviousButton: Element = document.querySelector("#image-gallery-lightbox .previous-button");
+	const lightboxNextButton: Element = document.querySelector("#image-gallery-lightbox .next-button");
+	const bonusImage: HTMLImageElement = document.querySelector("#bonus-image");
+	const bonusText: HTMLImageElement = document.querySelector("#bonus-text");
+	const fileNameExtractRegex: RegExp = /(?!.*\/)(?<=\/).+?(?=\..+)/g;
+	const imageArray: Array<{ default: ImageMetadata }> = JSON.parse(bonusImage.dataset.imageArray);
+	const randomImage = imageArray[Math.floor(Math.random() * imageArray.length)];
 	let currentImageIndex: number = 0;
-
-	for (let i = 0; i < galleryImages.length; i++) {
-		expandButtons[i].dataset.index = String(i);
-	}
 
 	function toggleAriaExpandedElem (elem: Element) {
 		let ariaExpanded = elem.getAttribute("aria-expanded");
@@ -35,6 +41,33 @@ import artwork4 from "../Images/artwork4.jpg";
 			elem.setAttribute("aria-expanded", "false");
 			controlledElem.classList.remove("expanded");
 		}
+	}
+
+	function lightboxImageSelector (index: string | number) {
+		if (!(typeof index == "string")) {
+			currentImageIndex = index
+		}
+		else if (index.toLowerCase() == "previous") {
+			currentImageIndex = (currentImageIndex - 1 < 0) ? (galleryImages.length - 1) : (currentImageIndex - 1);
+		}
+		else if (index.toLowerCase() == "next") {
+			currentImageIndex = (currentImageIndex + 1 >= galleryImages.length) ? 0 : (currentImageIndex + 1);
+		}
+		else {
+			return;
+		}
+		lightboxImage.width = Number(galleryImages[currentImageIndex].getAttribute("width"));
+		lightboxImage.height = Number(galleryImages[currentImageIndex].getAttribute("height"));
+		lightboxImage.alt = galleryImages[currentImageIndex].alt;
+		lightboxImage.src = galleryImages[currentImageIndex].src;
+	}
+
+	for (let i = 0; i < galleryImages.length; i++) {
+		expandButtons[i].dataset.index = String(i);
+		expandButtons[i].addEventListener("click", () => {
+			lightboxImageSelector(Number(expandButtons[i].dataset.index));
+			lightboxElem.showModal();
+		}, false);
 	}
 
 	navMenuButton.addEventListener("click", () => { 
@@ -56,54 +89,92 @@ import artwork4 from "../Images/artwork4.jpg";
 		toggleAriaExpandedElem(navbarButton);
 
 		let ariaExpanded = navbarButton.getAttribute("aria-expanded");
-		const hiddenText = document.querySelector("#navbar-button > .visually-hidden");
+		// SRText stands for Screen Reader Text
+		const SRText = document.querySelector("#navbar-button > .visually-hidden");
 
 		if (ariaExpanded == "false") {
 			document.body.style.setProperty("--navbar-width", "var(--contracted-navbar-width)");
-			hiddenText.textContent = hiddenText.getAttribute("data-minimised-text");
+			SRText.textContent = SRText.getAttribute("data-minimised-text");
 		}
 		else {
 			document.body.style.setProperty("--navbar-width", "var(--expanded-navbar-width)");
-			hiddenText.textContent = hiddenText.getAttribute("data-maximised-text");
+			SRText.textContent = SRText.getAttribute("data-maximised-text");
 		}
 	}, false);
 
-	for (let i = 0; i < expandButtons.length; i++) {
-		expandButtons[i].addEventListener("click", () => {
-			currentImageIndex = Number(expandButtons[i].dataset.index);
-			lightboxImage.width = galleryImages[Number(expandButtons[i].dataset.index)].width;
-			lightboxImage.height = galleryImages[Number(expandButtons[i].dataset.index)].height;
-			lightboxImage.alt = galleryImages[Number(expandButtons[i].dataset.index)].alt;
-			lightboxImage.src = galleryImages[Number(expandButtons[i].dataset.index)].src;
-			
-			lightboxElem.showModal();
-		}, false);
-	}
-
 	lightboxCloseButton.addEventListener("click", () => { lightboxElem.close() }, false);
+	lightboxPreviousButton.addEventListener("click", () => { lightboxImageSelector("previous") }, false);
+	lightboxNextButton.addEventListener("click", () => { lightboxImageSelector("next") }, false);
 
-	lightboxPreviousButton.addEventListener("click", () => {
-		currentImageIndex = (currentImageIndex - 1 < 0) ? (galleryImages.length - 1) : (currentImageIndex - 1);
+	bonusImage.width = randomImage.default.width;
+	bonusImage.height = randomImage.default.height;
+	bonusImage.src = randomImage.default.src;
+	bonusImage.style.setProperty("--image-width", `${String(randomImage.default.width)}px`);
+	bonusImage.style.setProperty("--image-height", `${String(randomImage.default.height)}px`);
+	/** 
+	* Returns the new text if the variable is empty
+	*/
+	let updateIfEmpty: (text: string, field: string) => string = (text, field) => {return !(field) ? text : field};
+	let quote = "";
+	let animeInfo = "";
+	switch (fileNameExtractRegex.exec(randomImage.default.src)[0]) {
+		case "Faputa-excited":
+			bonusImage.alt = updateIfEmpty("Faputa running around on her arms and legs, and jumping", bonusImage.alt);
+			quote = updateIfEmpty("Faputa is adorable :3", quote);
+			animeInfo = updateIfEmpty("Faputa from Made In Abyss", animeInfo);
 
-		lightboxImage.width = galleryImages[currentImageIndex].width;
-		lightboxImage.height = galleryImages[currentImageIndex].height;
-		lightboxImage.alt = galleryImages[currentImageIndex].alt;
-		lightboxImage.src = galleryImages[currentImageIndex].src;
-	}, false);
+		case "Faputa-nom-reg":
+			bonusImage.alt = updateIfEmpty("Faputa biting Reg's cheek", bonusImage.alt);
+			quote = updateIfEmpty("Cute Faputa cutely biting Reg's cheek :3, I love Made In Abyss", quote);
+			animeInfo = updateIfEmpty("Faputa (the one biting) and Reg (the one being bitten) from Made In Abyss", animeInfo);
 
-	lightboxNextButton.addEventListener("click", () => {
-		currentImageIndex = (currentImageIndex + 1 >= galleryImages.length) ? 0 : (currentImageIndex + 1);
+		case "Feel The Burn":
+			bonusImage.alt = updateIfEmpty("Shizumo, standing and being on fire at a table, while Atarashi and Matsumi look at her", bonusImage.alt);
+			quote = updateIfEmpty("Representation of me motivating myself to finish the website (I know nothing about the anime)", quote);
+			animeInfo = updateIfEmpty("Shizumo (the one on fire), Atarashi (on the right), Matsumi (on the left) from Saki Achiga-hen: Episode of Side-A", animeInfo);
 
-		lightboxImage.width = galleryImages[currentImageIndex].width;
-		lightboxImage.height = galleryImages[currentImageIndex].height;
-		lightboxImage.alt = galleryImages[currentImageIndex].alt;
-		lightboxImage.src = galleryImages[currentImageIndex].src;
-	}, false);
+		case "Nanachi-celebrating":
+			bonusImage.alt = updateIfEmpty("Nanachi smiling while raising their arm as the camera zooms in with Belaf in the background", bonusImage.alt);
+			quote = updateIfEmpty("Representation of me celebrating having survived long hours of working on this website", quote);
+			animeInfo = updateIfEmpty("Nanachi (the one in the front) and Belaf from Made In Abyss", animeInfo);
+
+		case "Nanachi-grinding":
+			bonusImage.alt = updateIfEmpty("Nanachi talking while turning the handle of a grinder", bonusImage.alt);
+			quote = updateIfEmpty("Nanachi grinding something as they are preparing food, I included this gif because I love Nanachi (a little too much)", quote);
+			animeInfo = updateIfEmpty("Nanachi from Made In Abyss", animeInfo);
+
+		case "Nanachi-sad":
+			bonusImage.alt = updateIfEmpty("Nanachi being sad in a sarcastic manner to tease Reg while holding a stone tablet and pencil", bonusImage.alt);
+			quote = updateIfEmpty("Rikooo, Oitekinaideee", quote);
+			animeInfo = updateIfEmpty("Nanachi from Made In Abyss", animeInfo);
+
+		case "aoi-inuyama-yuru-camp":
+			bonusImage.alt = updateIfEmpty("Aoi Inuyama opening her eyes then waving her hand", bonusImage.alt);
+			quote = updateIfEmpty("Hiii, I hope you enjoyed your time on my website! See you another time!", quote);
+			animeInfo = updateIfEmpty("Aoi Inuyama from Yuru Camp", animeInfo);
+
+		case "little dance":
+			bonusImage.alt = updateIfEmpty("Chika Fujiwara doing a little dance", bonusImage.alt);
+			quote = updateIfEmpty("A fun little dance to distract oneself from responsibilities and other things", quote);
+			animeInfo = updateIfEmpty("Chika Fujiwara from Kaguya-sama: Love Is War", animeInfo);
+
+		case "nekopara-anime-lay-down-exhausted-tired":
+			bonusImage.alt = updateIfEmpty("Chocola and Vanilla both exhausted while Vanilla lay her head down on the table and Chocola lay down on the couch", bonusImage.alt);
+			quote = updateIfEmpty("This is how I am after spending hours working on this website, making sure that everything works as intended, and that there is no mistakes. They are so adorable >w<", quote);
+			animeInfo = updateIfEmpty("Chocola and Vanilla from Nekopara", animeInfo);
+
+		default:
+			bonusText.innerHTML = `<i>"${ quote }"<br><br>- ${ animeInfo } -</i>`;
+			bonusImage.title = bonusImage.alt;
+			console.log(`bonusImage.alt = ${ updateIfEmpty("No alternative text is available for the chosen image", bonusImage.alt) }`);
+			console.log(`quote = ${ updateIfEmpty("No quote is available for the chosen image", quote) }`);
+			console.log(`animeInfo = ${ updateIfEmpty("No information about the anime is available for the chosen image", animeInfo) }`);
+	}
 </script>
 
 <Layout title="Zarcka's Portfolio">
 	<a href="#main" id="main-skip-link">Skip to main content</a>
-	<div id="navbar" class="expanded">
+	<div id="navbar">
 		<nav id="nav-menu">
 			<button id="nav-menu-button" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Navigation Menu Button">
 				<span aria-hidden="true">&plus;</span>
@@ -127,11 +198,11 @@ import artwork4 from "../Images/artwork4.jpg";
 		</nav>
 		<div class="secondary"></div>
 		<div class="accent">
-			<button id="navbar-button" type="button" aria-expanded="true" aria-controls="navbar">
+			<button id="navbar-button" type="button" aria-expanded="false" aria-controls="navbar">
 				<span 
 					class="visually-hidden" 
 					data-maximised-text="Hide navigation bar" 
-					data-minimised-text="Open navigation bar">Hide navigation bar</span> 
+					data-minimised-text="Open navigation bar">Open navigation bar</span> 
 				<span aria-hidden="true">&gt;</span>
 			</button>
 		</div>
@@ -140,8 +211,10 @@ import artwork4 from "../Images/artwork4.jpg";
 		<header id="intro">
 			<h1 id="title">
 				<span class="primary-underline">Zarcka,</span>
-				<br />
-				<span class="secondary-underline">Web Designer</span>
+				<br>
+				<span class="secondary-underline">
+					<span class="code-tag">&lt;</span>Programmer<span class="code-tag"> /&gt;</span>
+				</span>
 				<svg
 					width="115"
 					height="107"
@@ -208,62 +281,29 @@ import artwork4 from "../Images/artwork4.jpg";
 			<section id="self-description" class="subsection">
 				<h2>About Me</h2>
 				<p>
-					Hi, my name's Zarcka! What do you think of it?
+					Hi, my name's Zarcka! What do you think about it?
 					<br>
-					I am someone who's a bit creative, a little silly and have a love for anything of cute such as cats :3, dogs and plushies ^-^. Also, I am passionate about Mathematics and have an interest for abstract concepts with real world applications. And to top it off, I am also a self-taught programmer, an occasional artist and a decent osu! player and I will be expanding on those three in the upcoming paragraphs.
+					I am someone who is rather creative, more or less silly, and who has a soft spot for anything of cute or adorable such as cats :3, dogs, and plushies ^-^. I find pleasure in learning about things that I am passionate about or simply interested in, and being able to better my understanding. Some of those things are &#8212; programming: I have been teaching myself programming for a few years by now and whilst I have become more or less good at it, I still have a lot to improve on and much more to learn, and so as of the time of writing, I am learning Haskell, a functional programming language, to improve as a programmer while expanding my skillset; mathematics: I am someone of passionate about mathematics and I have been learning about differentiation for a little while from online resources such as the '<a href="https://www.3blue1brown.com/topics/calculus" target="_blank">Essence of Calculus</a>' by <a href="https://www.3blue1brown.com" target="_blank">3Blue1Brown</a> and have more recently started learning on integration from the same course, and further on, I would like to learn more on linear algebra; German: I am learning German on my own from books, online resources, and a with a little help from my lovely, multilingual friend who also has their own website: <a href="https://leaf.moe" target="_blank">https://leaf.moe</a>, and as I am still early on in my learning, I often make mistakes and even though they can be discouraging, I am determined and do not plan on giving up anytime soon; and DIY: as I like repairing and crafting little things, DIY became an interest of mine, and an example of me doing DIY was when I used a pen cap as a replacement for the missing tip of my umbrella. Moreover, I am an artist and I draw on rare occasions as I am busy with studies and working on other projects such as this one. But regardless of that, I still would like to draw more often as I want to complete some of my unfinished artworks especially my masterpiece. Furthermore, I enjoy playing osu!, a rythm game, and more specifically osu!mania 4k, a game mode of osu!, as I have been improving quite a lot at it and as I find it more enjoyable than the standard game mode. And lastly, I enjoy playing around with my voice by pitching it higher, meowing or making other weird sounds but most of the time, I prefer to meow and I have been able to improve quite a lot, I now can meow more easily at will and better modulate it.
 				</p>
 				<p>
-					Starting with me as a programmer, I had an interest in computers and electronics since a young age and from there, I learnt from online resources on my own. However, it has been no smooth sailing, I watched several tutorials, tried multiple programming languages and gave up many times. Despite the hardships, I kept on and this is where I am, a front-end developer with a bit of experience in web design and moving forward, I would like to learn more about the inner workings of computers and computer science in general.
+					Starting with programming, I got into programming at a young age due to my fascination for computers and electronics. At first, I attempted to learn python with little success, then my second attempt was at learning at C++ &#8212; and you can guess how well did that went. Even though I had no prior experience to low-level programming, I was quite ambitious and even created a little group named the 'C++ Grave' as I said that I would bury myself there if I failed to learn C++, and that this grave would provide guidance and caution to those who dare follow the same path. However, it would not only turn out to be a place to talk about my journey but also a place to have a casual chat and discuss about life and many other things &#8212; cooking included. I got to spend a fun and memorable time with some nice people and I am quite thankful to them for those memories. Even though my adventure had unfortunately ended (and that I am now buried and became a ghost), the history of this group would not end so soon, but unfortunately, it is too long to write here in details. After I have given up C++, I moved to front-end development where I would learn about HTML, CSS, JS, JS-frameworks, and a little web designing skills alongside other things. Nevertheless, I still attempt to learn a new programming language and this time around, it is Haskell &#8212; a functional programming language. And later on, I would like to move to other things like game development, and maybe also learn about electronics and even about robotics.
 				</p>
 				<p>
-					Me as an occasional artist, I have been drawing for a few years and my specialty is abstract art. I drew from time to time and at first, those were random doodles. As time went, I stopped drawing. One afternoon, I met a dear friend who's amazing at art and seeing one of their artworks made me very jealous so I picked up my pencil and was back to drawing. 1 or 2 years later, I made great strides in improving my art skills and I am quite proud of it. On top of that, I am no more as jealous of my friend's art or of others' art as before and I will keep drawing from time to time, making things I can be proud of.
+					Following with art, I draw occasionally using pen or pencil on A3 or A4 paper. I originally used pencil but now pen is preferred for drawing but not yet for writing; pen is my preferred option as it doesn't need to be sharpened like pencil does but I am still improving at drawing with pen and better incorporating colours into my art while also learning about the different types of pen and inks, and their properties. A4 paper is the size of paper I originally began with and is still my preferred option as I am habited to drawing on A4 paper and as it takes less time to complete compared to A3 paper, but by 'less time', I do not mean 1 or 2 weeks; a detailed A4 drawing can take up to a month or more depnding on the size of the drawing, the level of details and how regurlarly I work on the drawing. So a full detailed A3 drawing would take half a year or more to be completed, and this is why you won't see new drawings often. Before my journey towards abstract art, I did draw but I was replicating other people's artworks from a mobile phone screen onto paper using pencil, and this may have inadvertently given me an advantage when I began doing abstract art. My journey began when I met a dear friend of mine who is an amazing artist (<a href="https://ashnscar21.carrd.co/" target="_blank">Ash's website</a>), and they showed an artwork of theirs to me which made me jealous so I started watching a tutorial but then deviated from it as I explored and did my own things. A few years later, my specialty is now abstract art, I am here writing about my way of doing art and I am no more as jealous of their artworks or other people's artworks as much as before. I thank them for giving me the spark of motivation that started my journey and the determination that kept me going till this day, so if you have the time, you should take a look at <a href="https://ashnscar21coms.carrd.co/#portfolio" target="_blank">their portfolio</a> and also check their other <a href="https://ashnscar21mediapage.carrd.co/" target="_blank">social media</a> especially the discord server, <a href="https://discord.gg/fhN7AYD6Yq" target="_blank">Ash's Cafe | Community Server</a>, as I am the host of Question of the Day (and Question of the Night) in this server, and you can meet me there.
 				</p>
 				<p>
-					Lastly, me as an osu player. I first joined osu in January of 2023 and in the beginning, I couldn't figure out how to play so I stopped playing. Fast-forward to 2 months later and I was back to osu! for some reason. However, this time, I could figure out how to play and from there I kept on improving slowly but surely. And over time, I started to play osu!mania 4K. I have fun playing it and I have had great improvements as of the time of writing. Even though I do not play as much as before, I still keep on improving and having fun in both osu!standard and osu!mania.
+					Lastly, osu! &#8212; my favourite rythm game (profile: <a href="https://osu.ppy.sh/users/32690558" target="_blank">Zarcka</a>). I began to play in January of 2023 and at first, it took me a while to get used to the mechanics of <a href="https://osu.ppy.sh/wiki/en/Game_Mode#osu!" target="_blank">osu!</a> (game mode). After having gotten used to osu! mechanics, I kept playing for more than a year using keyboard and mouse, and I am still playing and improving while having fun. And at the time of writing, I can play <a href="https://osu.ppy.sh/wiki/en/Beatmap/Difficulty" target="_blank">difficulties</a> up to 4 stars at an AR of around 9. Furthermore, I am also an <a href="https://osu.ppy.sh/wiki/en/Game_Mode#osu!mania" target="_blank">osu!mania</a> [4K, 6K, 7K] player. I began playing osu!mania as my performance on osu! began to plateau and I was becoming increasingly frustrated at it, so I took a break from osu! and focused on osu!mania; I improved quite rapidly and had a lot of fun, the became curious so I tried out 6K and later on 7K. The highest difficulty I can play on osu!mania 4K: 3.2 stars; 6K and 7K: 2 stars. Last but not least, I really like playing both osu! and osu!mania, and osu! is my favourite rythm game and have made my love for rythm games even stronger. I also began playing Phigros (it's a nightmare of its own) as it caught my interest and as it has some challenging game mechanics that put my skills to the test; and I have been having fun playing Phigros even though I struggle to hit some note types.
 				</p>
 			</section>
 			<section id="hobbies" class="subsection">
 				<h3>Hobbies</h3>
 				<ul class="text-list">
 					<li class="list-item">Programming</li>
-					<li class="list-item line-through"><i>Drawing</i></li>
+					<li class="list-item">Drawing</li>
 					<li class="list-item">Playing osu!</li>
 					<li class="list-item line-through"><i>Playing sudoku</i></li>
 					<li class="list-item line-through"><i>Reading</i></li>
 				</ul>
-			</section>
-			<section id="likes-dislikes" class="subsection">
-				<section id="likes" class="subsection">
-					<h3>&plus; Likes</h3>
-					<ul class="text-list">
-						<li class="list-item">Cute plushies</li>
-						<li class="list-item">Cats and dogs
-<pre class="text-art" aria-hidden="true">
-        へ   ♡   ╱|、
-    ૮ -  ՛)     (` - 7
-    / ⁻  ៸|      |、⁻〵
-乀 (ˍ, ل  ل      じしˍ,)ノ
-</pre>
-						</li>
-						<li class="list-item">Other cute animals</li>
-						<li class="list-item">Chocolate</li>
-						<li class="list-item">Text art or ASCII art</li>
-						<li class="list-item">Looking at plants</li>
-						<li class="list-item">Mahiro Oyama from Onii-chan wa Oshimai!</li>
-						<li class="list-item">Camellia and t+pazolite (both are amazing)</li>
-						<li class="list-item">Made In Abyss (I love this anime but I will not watch it again for a long time)</li>
-					</ul>
-				</section>
-				<section id="dislikes" class="subsection">
-					<h3>&minus; Dislikes</h3>
-					<ul class="text-list">
-						<li class="list-item">Feeling lonely for long periods of time</li>
-						<li class="list-item">Feeling depressed</li>
-						<li class="list-item">Being tired but can't fall asleep</li>
-						<li class="list-item">Realistic blood, gore, etc <i>(I am a bit senstive to those kind of things)</i></li>
-						<li class="list-item"><b>The feeling of envying something that I can never have.</b></li>
-					</ul>
-				</section>
 			</section>
 			<section id="stats" class="subsection">
 				<h3>Statistics</h3>
@@ -286,6 +326,53 @@ import artwork4 from "../Images/artwork4.jpg";
 					</li>
 				</ul>
 			</section>
+			<section id="anime" class="subsection">
+				<h3>Anime</h3>
+				<ul class="text-list">
+					<li class="list-item">Diabolik Lovers [Season 1]</li>
+					<li class="list-item">The Case Study of Vanitas [Season 1-2]</li>
+					<li class="list-item">Made In Abyss [Season 1-2]</li>
+					<li class="list-item">Made In Abyss the Movie: Dawn of the Deep Soul</li>
+					<li class="list-item">Black Butler [Ep 1]</li>
+					<li class="list-item">Onimai: I'm Now Your Sister [Ep 1-2]</li>
+					<li class="list-item">Mashle: Magic and Muscles [Ep 1-10]</li>
+					<li class="list-item">Miss Kobayashi's Dragon Maid [Ep 1-7]</li>
+				</ul>
+			</section>
+			<section id="likes-dislikes" class="subsection">
+				<section id="likes" class="subsection">
+					<h3>&plus; Likes</h3>
+					<ul class="text-list">
+						<li class="list-item">Cute plushies</li>
+						<li class="list-item">Cats and dogs
+<pre class="text-art" aria-hidden="true">
+        へ   ♡   ╱|、
+    ૮ -  ՛)     (` - 7
+    / ⁻  ៸|      |、⁻〵
+乀 (ˍ, ل  ل      じしˍ,)ノ
+</pre>
+						</li>
+						<li class="list-item">Other cute animals</li>
+						<li class="list-item">Coffee</li>
+						<li class="list-item">Chocolate</li>
+						<li class="list-item">Text art or ASCII art</li>
+						<li class="list-item">Looking at plants</li>
+						<li class="list-item">Mahiro Oyama from Onii-chan wa Oshimai!</li>
+						<li class="list-item">Camellia and t+pazolite (both are amazing)</li>
+						<li class="list-item">Made In Abyss (I love this anime but I will not watch it again for a long time)</li>
+					</ul>
+				</section>
+				<section id="dislikes" class="subsection">
+					<h3>&minus; Dislikes</h3>
+					<ul class="text-list">
+						<li class="list-item">Feeling lonely for long periods of time</li>
+						<li class="list-item">Feeling depressed</li>
+						<li class="list-item">Being tired but can't fall asleep</li>
+						<li class="list-item">Realistic blood, gore, etc <i>(I am a bit senstive to those kind of things)</i></li>
+						<li class="list-item"><b>The feeling of envying something that I can never have.</b></li>
+					</ul>
+				</section>
+			</section>
 		</section>
 		<section id="projects">
 			<section id="drawings" class="subsection">
@@ -296,6 +383,7 @@ import artwork4 from "../Images/artwork4.jpg";
 							src={artwork1}
 							alt="A pencil drawing of tentacles with eyes coming out of the center using small dots and lines"
 							class="gallery-item"
+							title="Inaccurate Biblical Angel.jpg"
 						/>
 						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
 					</div>
@@ -304,6 +392,7 @@ import artwork4 from "../Images/artwork4.jpg";
 							src={artwork2}
 							alt="An abstract drawing using pencil"
 							class="gallery-item"
+							title="Nightmarish Algae.jpg"
 						/>
 						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
 					</div>
@@ -312,6 +401,7 @@ import artwork4 from "../Images/artwork4.jpg";
 							src={artwork3}
 							alt="An incomplete abstract drawing using pencil"
 							class="gallery-item"
+							title="Incomplete Drawing.jpg"
 						/>
 						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
 					</div>
@@ -320,6 +410,7 @@ import artwork4 from "../Images/artwork4.jpg";
 							src={artwork4}
 							alt="An incomplete drawing consisting of small dots of different colours using pens"
 							class="gallery-item"
+							title="Multi-coloured Mold.jpg"
 						/>
 						<button type="button" class="secondary-button expand-button">Expand <span aria-hidden="true">&plus;</span></button>
 					</div>
@@ -341,95 +432,85 @@ import artwork4 from "../Images/artwork4.jpg";
 				</div>
 			</section>
 		</section>
-		<footer id="footer">
+		<section id="footer">
 			<section id="footer-note" class="subsection">
 				<h2>Thank you for reading!</h2>
 				<p>
-					The designing of this website had started in the October of 2023 and well.. The website did not turn out exactly like I had designed it but still the design had been very much helpful and I would like to thank a more experienced friend of mine for his feedback on the design. 
+					The designing of this website had started in the October of 2023 and the website hasn't turned out exactly as I designed it but it turned out for the better and the design was very useful in the process. Thanks to a more experienced person for the feedback on the design and to Leaf for feedback on the sidebar. It now is contracted by default, the little border on the button is no more present unless being hovered on and then it is only 4px wide.
 				</p>
 				<p>
-					The development of the website had started in November of 2023 and the first version of it was released on the 31th of December 2023 at around 1 am. Pushing it to the Github repository was harder than I thought and I had quickly realised I had forgotten to change the website title so I rapidly fixed that. However there were still other things I wanted to add and change as I had rushed it to put it online before 2024.
+					The development of the website had started in November of 2023 and the first version of it was released on the 31th of December 2023 at around 1 am. Pushing it to the Github repository was harder than I thought and I had quickly realised I had forgotten to change the website title so I rapidly fixed that. 
 				</p>
 				<p>
-					Even though the website was technically done, it was not perfect enough so I made a list of things to work on and improve. Fast forward to <span class="line-through"><i>February</i></span> March of 2024 (this project took way longer), the About Me section has been rewritten; the Skills section has been renamed to the Statistics section and more was added to it; and the other sections have been changed too. Still, I am not satisfied with what I wrote in the about me section as it doesn't quite capture who I am and other things such as my interest for Mathematics and how I can be from time to time. I could keep working on it for another month but I have my academic studies and other projects I want to devote my attention and energy to.
+					Even though the website was technically done, it was not perfect enough so I made a list of things to work on and improve. Fast forward to February March of 2024 (this project took way longer), the About Me section has been rewritten; the Skills section has been renamed to the Statistics section and more was added to it; and the other sections have been changed too. Still, I am not satisfied with what I wrote in the about me section as it doesn't quite capture who I am and other things such as my interest for Mathematics and how I can be from time to time. I could keep working on it for another month but I have my academic studies and other projects I want to devote my attention and energy to.
 				</p>
 				<p>
-					So yep, this is the conclusion. I hope that you got to know me better or liked my website at least. And as always I hope that you, dear reader, have an amazing day, night or time and I bid farewell to you.
+					August 2024 update: The About Me section was re-written <i>(It's even longer now)</i>, added an Anime section, updated the Hobbies section (I am back to drawing :D), and added Coffee to the list of things I like. The sidebar is contracted by default, the little light red border on the button has been removed; it now only appears on hover and is 4px wide. And the pictures in the Drawing section have been replaced with higher resolution versions.
+				</p>
+				<p>
+					I will end it here as I am tired and have been focusing solely on finishing this website. I would like to finally go back to having more relaxed days, playing osu! and Open Transport Tycoon Deluxe (<a href="https://www.openttd.org" target="_blank">OpenTTD's website</a>), and working on my latest artwork. Check out <a href="https://ashnscar21.carrd.co/" target="_blank">Ash's website</a> as they deserve attention and support. So, I hope you enjoyed your time here and if you have any feedback, you can send it to me and I will read it. I hope you, dear reader, have an amazing day, night or time, and I bid you farewell. <i>Scroll for bonus section :3</i>
 				</p>
 			</section>
 			<section id="contacts" class="subsection">
 				<h3>Contacts</h3>
 				<ul class="contacts-list">
-					<li class="list-item">Osu: <a href="https://osu.ppy.sh/users/32690558" class="external-link"><b>Zarcka</b></a></li>
-					<li class="list-item">Github: <a href="https://github.com/Zarcka/" class="external-link"><b>Zarcka</b></a></li>
-					<li class="list-item">Discord: <b>zarcka</b> </li>
-					<p>(Note: I am very unlikely to respond to friend requests and if you do send a message, please inform me that you came from this website!)</p>
+					<li class="list-item">
+						Osu: <a href="https://osu.ppy.sh/users/32690558" target="_blank" class="external-link">Zarcka</a>
+					</li>
+					<li class="list-item">
+						Github: <a href="https://github.com/Zarcka/" target="_blank" class="external-link">Zarcka</a>
+					</li>
+					<li class="list-item">
+						Discord: <a href="https://discord.gg/fhN7AYD6Yq" target="_blank" class="external-link">Zarcka</a>
+					</li>
+					<p>(Note: The Discord link will invite you to Ash's Cafe | Community Server. You can mention me there and mention that you came from my website, then I will friend you)</p>
 				</ul>
 			</section>
-			<section id="bonus" class="subsection">
-<pre class="text-art" aria-hidden="true">
-                    ＿＿
-                ✿＞　　 フ
-                | 　_　 _|
-               ／` ミ＿xノ
-              /　　　 　 |
-             /　 ヽ　　 ﾉ
-             │　　|　|　|
-         ／￣|　　 |　|　|
-         | (￣ヽ＿_ヽ_)__)
-         ＼二つ
-
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
- Finally, I finished this website..
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-</pre>
-			</section>
-		</footer>
+		</section>
+		<section id="bonus">
+			<h2>Bonus</h2>
+			<img src="" alt="" id="bonus-image" data-image-array={ JSON.stringify(images) }/>
+			<p id="bonus-text"></p>
+		</section>
 	</main>
 </Layout>
 
 <style>
+/* --- Miscelleneous - START --- */
 	:root {
-		/* Text colour - START */
+  /* --- Colours - START --- */
 		--text-clr: #39150b;
 		--text-dark-clr: #331109;
 		--text-darker-clr: #290c06;
 		--text-light-clr: #5b331c;
 		--text-lighter-clr: #734932;
-		/* Text colour - END */
 
-		/* Background colour - START */
 		--bg-clr: #fbe9e4;
 		--bg-dark-clr: #e0c0b8;
 		--bg-darker-clr: #ba8a7f;
 		--bg-light-clr: #fcf2ed;
 		--bg-lighter-clr: #fcf7f2;
-		/* Background colour - END */
 
-		/* Primary colour - START */
 		--primary-clr: #0d5263;
 		--primary-dark-clr: #0b4759;
 		--primary-darker-clr: #07364a;
 		--primary-light-clr: #398391;
 		--primary-lighter-clr: #7eb9c2;
-		/* Primary colour - END */
 
-		/* Secondary colour - START */
-		--secondary-clr: #f4b8a9;
-		--secondary-dark-clr: #db9788;
-		--secondary-darker-clr: #b8705f;
-		--secondary-light-clr: #f7d2c1;
-		--secondary-lighter-clr: #fae9dc;
-		/* Secondary colour - END */
+		--secondary-clr: #ffbdb6;
+		--secondary-dark-clr: #e69b93;
+		--secondary-darker-clr: #bf6d65;
+		--secondary-light-clr: #ffd8cc;
+		--secondary-lighter-clr: #ffece0;
 
-		/* Accent colour - START */
 		--accent-clr: #be310e;
 		--accent-dark-clr: #ad280a;
 		--accent-darker-clr: #8f2007;
 		--accent-light-clr: #d4764a;
 		--accent-lighter-clr: #e6b591;
-		/* Accent colour - END */
+  /* --- Colours - END --- */
 
+  /* --- Section Styles - START --- */
 		--section-border-width: 1px;
 		--section-border-clr: var(--text-lighter-clr);
 		--section-border-style: solid;
@@ -439,18 +520,14 @@ import artwork4 from "../Images/artwork4.jpg";
 		--subsection-border-clr: var(--text-lighter-clr);
 		--subsection-border-style: dashed;
 		--subsection-border: var(--subsection-border-width) var(--subsection-border-clr) var(--subsection-border-style);
+  /* --- Section Styles - END --- */
 	}
 
 	* {
 		box-sizing: border-box;
 	}
-	
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
+
+	h1, h2, h3, h4, h5, h6 {
 		margin-top: 0;
 		font-family: "DM Serif Display";
 		text-decoration-line: underline;
@@ -487,8 +564,8 @@ import artwork4 from "../Images/artwork4.jpg";
 	}
 
 	h3 {
-		font-size: calc(1.5rem + 0.35vh + 0.35vw);
 		margin-bottom: 1rem;
+		font-size: calc(1.5rem + 0.35vh + 0.35vw);
 	}
 
 	p {
@@ -504,7 +581,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		grid-area: content;
 	}
 
-	section:not(.subsection) {
+	section:not(.subsection), footer {
 		padding: 5rem 8vw;
 	}
 
@@ -519,6 +596,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		negative Y-axis value.
 	*/
 	#main-skip-link {
+		z-index: 1000;
 		background: var(--text-darker-clr);
 		color: var(--bg-lighter-clr);
 		left: 0;
@@ -548,6 +626,42 @@ import artwork4 from "../Images/artwork4.jpg";
 		width: 1px;
 	}
 
+	.line-through {
+		text-decoration-line: line-through;
+	}
+
+	.text-art {
+		margin: 1em 0 0 1em;
+		font-size: 0.6em;
+		font-weight: 900;
+		line-height: 1.3;
+	}
+
+	.code-tag {
+		font-family: Poppins;
+		font-weight: 500;
+		font-size: 0.9em;
+		color: var(--accent-light-clr);
+	}
+
+	.external-link {
+		position: relative;
+	}
+
+	.external-link::after {
+		content: "";
+		position: absolute;
+		left: calc(100% + 0.35em);
+		width: 100%;
+		height: 100%;
+		background-image: url("../Icons/arrow-up-right-from-square-solid.svg");
+		background-repeat: no-repeat;
+		background-position: 0 100%;
+		background-size: 1.15em;
+	}
+/* --- Miscellaneous - END --- */
+
+/* --- Navigation Bar - START --- */
 	#navbar {
 		z-index: 100;
 		height: 100vh;
@@ -584,7 +698,7 @@ import artwork4 from "../Images/artwork4.jpg";
 		background-color: var(--accent-clr);
 		background-size: 100% 100%;
 		border: none;
-		border-left: 8px var(--accent-light-clr) solid;
+		border-left: 0px var(--accent-light-clr) solid;
 		cursor: pointer;
 		transition:
 			200ms all cubic-bezier(0.18, 0.89, 0.32, 1.28),
@@ -596,7 +710,7 @@ import artwork4 from "../Images/artwork4.jpg";
 	#navbar-button:focus-visible {
 		background-color: var(--accent-dark-clr);
 		background-size: 0 100%;
-		border-left-width: 12px;
+		border-left-width: 4px;
 	}
 
 	#navbar-button:focus-visible {
@@ -605,7 +719,6 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	#navbar-button:active {
 		background-color: var(--accent-darker-clr);
-		border-left-width: 8px;
 	}
 
 	#navbar-button[aria-expanded="false"] {
@@ -693,7 +806,8 @@ import artwork4 from "../Images/artwork4.jpg";
 		border-top: none;
 	}
 
-	@media (max-width: 62.5em) or (max-height: 38.125em) {
+	@media (max-width: 67em) or (max-height: 38.125em) {
+  /* --- Mobile Navigation Bar - START --- */
 		#navbar {
 			width: 100%;
 			height: initial;
@@ -745,28 +859,11 @@ import artwork4 from "../Images/artwork4.jpg";
 		.nav-link {
 			border-top: none;
 		}
+  /* --- Mobile Navigation Bar - END --- */
 	}
+/* --- Navigation Bar - END --- */
 
-	.line-through {
-		text-decoration-line: line-through;
-	}
-
-	.external-link {
-		position: relative;
-	}
-
-	.external-link::after {
-		content: "";
-		position: absolute;
-		left: calc(100% + 0.35em);
-		width: 100%;
-		height: 100%;
-		background-image: url("../Icons/arrow-up-right-from-square-solid.svg");
-		background-repeat: no-repeat;
-		background-position: 0 100%;
-		background-size: 1.15em;
-	}
-
+/* --- Buttons - START --- */
 	.primary-button,
 	.secondary-button {
 		display: inline-flex;
@@ -844,6 +941,22 @@ import artwork4 from "../Images/artwork4.jpg";
 		background-color: var(--secondary-dark-clr);
 	}
 
+	.expand-button {
+		display: block;
+		margin-left: auto;
+	}
+
+/*
+	When the expanded image is smaller than the unexpanded image or displayed image due to screen size being too small
+	Remove the expand button as it is not useful.
+*/
+	@media (max-width: 40rem) {
+		.expand-button {
+			display: none;
+		}
+	}
+/* --- Buttons - END --- */
+
 	.progress-bar {
 		position: relative;
 		display: block;
@@ -872,16 +985,17 @@ import artwork4 from "../Images/artwork4.jpg";
 	}
 
 	.stats-list {
-		margin-top: 1.5em;
 		padding-left: 0;
-		width: calc(100vw - (var(--side-padding, 0vw) * 2));
+		/* width of the list after substracting padding on both sides */
+		/* formula to calculate the width: 100vw - (side-padding * 2) */
+		width: 84vw;
 		max-width: 19.5rem;
 		font-weight: 500;
 		list-style: none;
 	}
 
 	.stats-list > .list-item {
-		margin-bottom: 3.5em;
+		margin-bottom: 3em;
 	}
 
 	.contacts-list {
@@ -892,24 +1006,6 @@ import artwork4 from "../Images/artwork4.jpg";
 	.contacts-list > .list-item {
 		margin-bottom: 0.5em;
 		font-weight: 500;
-	}
-
-	.text-art {
-		margin: 1em 0 0 1em;
-		font-size: 0.6em;
-		font-weight: 900;
-		line-height: 1.3;
-	}
-
-	.expand-button {
-		display: block;
-		margin-left: auto;
-	}
-
-	@media (max-width: 40em) {
-		.expand-button {
-			display: none;
-		}
 	}
 
 	.image-gallery {
@@ -953,8 +1049,8 @@ import artwork4 from "../Images/artwork4.jpg";
 
 	#lightbox-image {
 		object-fit: contain;
-		width: 100%;
 		height: 100%;
+		width: 100%;
 		grid-row: 1 / 3;
 		grid-column: 2 / 3;
 	}
@@ -1017,10 +1113,13 @@ import artwork4 from "../Images/artwork4.jpg";
 	}
 
 	#title > .primary-underline {
+		position: relative;
 		text-decoration-color: var(--primary-lighter-clr);
 	}
 
 	#title > .secondary-underline {
+		position: relative;
+		word-break: break-all;
 		text-decoration-color: var(--secondary-clr);
 	}
 
@@ -1031,28 +1130,29 @@ import artwork4 from "../Images/artwork4.jpg";
 		width: 1.35em;
 	}
 
+/* --- About Section & Subsections - START --- */
+/* --- Breakpoint 1 (Default) | Mobile Screen Size - START --- */
 	#about {
-		overflow: hidden;
-		display: grid;
-		grid-template-columns: minmax(50ch, 1.75fr) auto;
-		grid-template-rows: repeat(auto-fit, 100%);
+		display: block;
 		padding: 0;
 	}
 
-	#self-description {
+	/* Adds no border-top to subsections */
+	#about > .subsection {
+		overflow-x: clip;
 		position: relative;
-		grid-column: 1 / 3;
-		padding: 5rem 4vw 5rem 6vw;
-		border-bottom: var(--subsection-border);
+		padding: 5rem 8vw;
+		border-top: none;
 	}
 
-	#hobbies {
-		position: relative;
-		padding: 5rem 4vw 5rem 6vw;
+	/* Adds a border-top to all subsections that has a subsection before them */
+	/* And as the first subsection doesn't have a subsection before it, it doesn't have a border-top */
+	#about > .subsection ~ .subsection {
+		border-top: var(--subsection-border);
 	}
 
-	#hobbies::before,
-	#hobbies::after {
+	#about >  .subsection ~ .subsection::after, 
+	#about > .subsection ~ .subsection::before {
 		content: "";
 		position: absolute;
 		border-radius: 2rem;
@@ -1060,192 +1160,186 @@ import artwork4 from "../Images/artwork4.jpg";
 		height: 8px;
 		background-color: var(--text-lighter-clr);
 		top: -4px;
-	}
+	} 
 
-	#hobbies::before {
+	#about > .subsection::before {
 		left: -4px;
 	}
 
-	#hobbies::after {
+	#about > .subsection::after {
 		right: -4px;
 	}
 
 	#likes-dislikes {
-		position: relative;
 		grid-column: 1 / 3;
 		display: flex;
 		flex-wrap: wrap;
 		column-gap: 10vw;
 		row-gap: 4.5rem;
-		padding: 5rem 6vw;
-		border-top: var(--subsection-border);
 	}
+/* --- Breakpoint 1 (Default) | Mobile Screen Size - END --- */
 
-	#likes-dislikes::before,
-	#likes-dislikes::after {
-		content: "";
-		position: absolute;
-		border-radius: 2rem;
-		width: 8px;
-		height: 8px;
-		background-color: var(--text-lighter-clr);
-		top: -4px;
-	}
-
-	#likes-dislikes::before {
-		left: -4px;
-	}
-
-	#likes-dislikes::after {
-		right: -4px;
-	}
-
-	#stats {
-		position: relative;
-		grid-column: 2 / 3;
-		grid-row: 1 / 3;
-		padding: 5rem 6vw 5rem 4vw;
-		border-left: var(--subsection-border);
-	}
-
-	#stats::before,
-	#stats::after {
-		content: "";
-		position: absolute;
-		border-radius: 2rem;
-		width: 8px;
-		height: 8px;
-		background-color: var(--text-lighter-clr);
-		left: -4px;
-	}
-
-	#stats::before {
-		top: -4px;
-	}
-
-	#stats::after {
-		bottom: -4px;
-	}
-
-	@media ((max-width: 85em) and (min-height: 38.125em)) or ((max-width: 70em) and (max-height: 38.125em)) {
-		#about {
-			display: block;
-		}
-
-		#about > .subsection {
-			--side-padding: 8vw;
-			padding-left: var(--side-padding);
-			padding-right: var(--side-padding);
-		}
-
-		#stats {
-			border-left: none;
-			border-top: var(--subsection-border);
-		}
-
-		#stats::after {
-			top: -4px;
-			left: initial;
-			bottom: initial;
-			right: -4px;
-		}
-	}
-
+/* --- Breakpoint 2 | Tablet Screen Size - START --- */
 	@media ((min-width: 85em) and (min-height: 38.125em)) or ((min-width: 70em) and (max-height: 38.125em)) {
-		#about > .subsection {
-			--side-padding: 8vw;
-			padding-left: var(--side-padding);
-			padding-right: var(--side-padding);
+		#about {
+			display: grid;
+			grid-template-columns: minmax(50ch, 1.75fr) auto;
+			grid-template-rows: repeat(auto-fit, 100%);
 		}
 
-		#hobbies {
+		#about > .subsection {
+			overflow-x: visible;
+		}
+
+		#about > #self-description {
+			grid-column: 1 / 3;
+		}
+
+		#about > #hobbies {
 			grid-column: 1 / 2;
 		}
 
-		#stats {
-			grid-column: 2 / 3;
-			grid-row: 2 / 3;
+		#about > #hobbies::after {
+			top: initial;
+			bottom: -4px;
 		}
 
-		#stats::before {
-			right: -4px;
-			left: initial;
+		#about > #stats {
+			grid-column: 2 / 3;
+			border-left: var(--subsection-border);
+		}
+
+		#about > #anime {
+			grid-column: 1 / 3;
 		}
 	}
+/* --- Breakpoint 2 | Tablet Screen Size - END --- */
 
+/* --- Breakpoint 3 | Large Screen Size - START --- */
 	@media ((min-width: 108em) and (min-height: 38.125em)) or ((min-width: 93em) and (max-height: 38.125em)) {
-		#self-description {
-			grid-column: 1 / 2;
-		}
-
-		#stats {
+		#about > #self-description {
 			grid-row: 1 / 3;
+			grid-column: 1 / 2;
+			padding: 5rem 6vw 5rem 8vw;
 		}
 
-		#stats::before {
+		#about > #hobbies, #about > #stats {
+			padding: 5rem 8vw 5rem 6vw;
+		}
+
+		#about > #hobbies {
+			grid-column: 2 / 3;
+			border-top: none;
+			border-left: var(--subsection-border);
+		}
+
+		#about > #stats {
+			grid-row: 2 / 3;
+			grid-column: 2 / 3;
+		}
+
+		#about > #stats::after {
+			top: initial;
 			right: initial;
+			bottom: -4px;
 			left: -4px;
 		}
 	}
+/* --- Breakpoint 3 | Large Screen Size - END --- */
 
+/* --- Breakpoint 4 | Extra Large Screen Size - START --- */
 	@media (min-width: 150em) {
 		#about {
 			grid-template-columns: 3fr 1.5fr 1fr;
 		}
 
-		#self-description {
+		#about > #self-description {
 			grid-column: 1 / 2;
-			padding: 5rem 4vw 5rem 6vw !important;
+			padding: 5rem 4vw 5rem 6vw;
 			border-bottom: none;
 		}
 
-		#hobbies {
+		#about > #hobbies, #about > #stats {
+			grid-row: 1 / 2;
+		}
+
+		#about > #hobbies {
 			grid-column: 2 / 3;
-			padding: 5rem 4vw !important;
+			padding: 5rem 4vw;
 			border-left: var(--subsection-border);
 		}
 
-		#hobbies::before {
+		#about > #hobbies::before {
 			left: -4px;
 		}
 
-		#hobbies::after {
+		#about > #hobbies::after {
 			top: initial;
 			left: -4px;
 			bottom: -4px;
 			right: initial;
 		}
 
-		#likes-dislikes {
-			padding: 5rem 6vw;
+		#about > #stats, #about > #anime {
+			padding: 5rem 6vw 5rem 4vw;
 		}
 
-		#stats {
+		#about > #stats {
 			grid-column: 3 / 4;
-			grid-row: 1 / 4;
-			padding: 5rem 6vw 5rem 4vw !important;
+			border-top: none;
 			border-left: var(--subsection-border);
 		}
-	}
 
-	footer {
+		#about > #anime {
+			grid-row: 2 / 3;
+			grid-column: 2 / 4;
+			border-left: var(--subsection-border);
+		}
+
+		#about > #anime::after {
+			top: initial;
+			left: -4px;
+			bottom: -4px;
+			right: initial;
+		}
+
+		#about > #likes-dislikes {
+			grid-column: 1 / 4;
+		}
+	}
+/* --- Breakpoint 4 | Large Screen Size - END --- */
+/* --- About Section & Subsections - END --- */
+
+	#footer {
 		overflow: hidden;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		row-gap: 4.5rem;
+		row-gap: 5rem;
 		column-gap: 10vw;
-		padding: 5rem 6vw;
 		border-top: var(--section-border);
 	}
 
 	#bonus {
 		width: 100%;
-		margin-top: 3rem;
 	}
 
-	#bonus > .text-art {
+	#bonus > * {
+		margin-left: auto;
+		margin-right: auto;
+		text-align: center;
+	}
+
+	#bonus-text {
 		width: fit-content;
-		margin: 0 auto;
-}
+		margin-top: 1.75rem;
+	}
+
+	#bonus > #bonus-image {
+		display: block;
+		width: calc(40rem + 10vw);
+		height: auto;
+		max-width: min(100%, var(--image-width, 100%));
+		box-shadow: 4px 4px 0 var(--secondary-clr);
+	}
 </style>
